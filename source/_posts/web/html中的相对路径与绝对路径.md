@@ -1,4 +1,10 @@
-#html中的相对路径与绝对路径
+---
+title: html中的相对路径与绝对路径
+date: 2018-05-11 11:02:00
+tags: html
+category: web
+---
+# html中的相对路径与绝对路径
 ------------------------------
 <img src="pics/abslout-relative.gif" alt="相对路径与绝对路径" title="相对路径与绝对路径">
 

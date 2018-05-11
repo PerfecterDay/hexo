@@ -1,9 +1,15 @@
-#Nginx安装与启动及命令行参数
+---
+title: Nginx安装与启动及命令行参数
+date: 2018-05-11 11:02:00
+tags: nginx
+category: nginx
+---
+# Nginx安装与启动及命令行参数
 ---------
-##Nginx安装
+## Nginx安装
 下载[nginx官网](http://nginx.org)下载安装即可。
 
-##Nginx启动、停止及重新加载配置文件
+## Nginx启动、停止及重新加载配置文件
 nginx有一个master线程和若干个工作线程，master线程主要用来读取配置文件、加载配置以及维护工作线程，工作线程才会真正的处理请求。
 
 1. 安装目录下，直接双击nginx启动。或者，cmd模式切换到安装目录，运行nginx.exe文件。
@@ -17,7 +23,7 @@ signal可以是以下参数：
 * *reload* — 重新加载配置文件
 * *reopen* — 重新打开日志文件
 
-##Nginx命令行参数
+## Nginx命令行参数
 
 * *-h* 显示命令行参数帮助信息
 * *-c file* 指定file为nginx的配置文件

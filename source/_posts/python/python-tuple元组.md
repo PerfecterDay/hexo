@@ -1,6 +1,12 @@
-#tuple元组
+---
+title: python元组
+date: 2018-05-11 11:02:00
+tags: python
+category: python
+---
+# tuple元组
 --------------
-##tuple元组定义
+## tuple元组定义
 tuple元组使用哪个()定义：
 
     classmates = ('Michael', 'Bob', 'Tracy')

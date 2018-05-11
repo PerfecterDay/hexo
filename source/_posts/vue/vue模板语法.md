@@ -1,7 +1,13 @@
-#vue模板语法
+---
+title: Vue安装
+date: 2018-05-11 11:02:00
+tags: vue
+category: vue
+---
+# vue模板语法
 
-##插值
-###文本
+## 插值
+### 文本
 数据绑定最常见的形式就是使用“Mustache”语法 (双大括号) 的文本插值：
 
 > <span>Message: {{ msg }}</span>

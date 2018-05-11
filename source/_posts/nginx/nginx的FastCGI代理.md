@@ -1,4 +1,11 @@
-#nginx的FastCGI代理
+---
+title: nginx的FastCGI代理
+date: 2018-05-11 11:02:00
+tags: nginx
+category: nginx
+---
+
+# nginx的FastCGI代理
 --------------------------
 nginx的FastCGI代理可以将请求转发到FastCGI服务器上，比如PHP服务。
 

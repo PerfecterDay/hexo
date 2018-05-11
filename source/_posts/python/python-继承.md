@@ -1,4 +1,10 @@
-#继承
+---
+title: python继承
+date: 2018-05-11 11:02:00
+tags: python
+category: python
+---
+# 继承
 ---------------
     class Animal(object):
         def run(self):
@@ -14,7 +20,7 @@ python继承类，只要在定义类时，在类名后边的小括号内写入�
 
 覆盖、多态与java类似。
 
-##静态语言 vs 动态语言
+## 静态语言 vs 动态语言
 对于静态语言（例如Java）来说，如果需要传入Animal类型，则传入的对象必须是Animal类型或者它的子类，否则，将无法调用run()方法。
 
 对于Python这样的动态语言来说，则不一定需要传入Animal类型。我们只需要保证传入的对象有一个run()方法就可以了：

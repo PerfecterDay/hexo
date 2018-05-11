@@ -1,4 +1,11 @@
-#配置nginx处理静态内容请求
+---
+title: 配置nginx处理静态内容请求
+date: 2018-05-11 11:02:00
+tags: nginx
+category: nginx
+---
+
+# 配置nginx处理静态内容请求
 -----------------
 通常来说，nginx配置文件包含若干个server上下文，不同的server上下文通过监听的端口和名字来区分。一旦nginx决定了用哪个server上下文来处理请求，nginx就会用请求URI与server块指令中配置的location指令的参数相比较，一旦匹配到某个location的参数，URI就会被添加到location块内的root指令参数后边，构成请求的静态内容的访问路径。如果有多个location匹配，nginx选取最长的匹配。
 假设有配置文件如下：

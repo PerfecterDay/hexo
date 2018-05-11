@@ -1,4 +1,10 @@
-#python列表生成器
+---
+title: python列表生成器
+date: 2018-05-11 11:02:00
+tags: python
+category: python
+---
+# python列表生成器
 -----------------------
 如果要生成[1x1, 2x2, 3x3, ..., 10x10]，仅用一行代码即可：
     

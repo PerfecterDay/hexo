@@ -1,4 +1,11 @@
-#nginx配置文件结构
+---
+title: nginx配置文件结构
+date: 2018-05-11 11:02:00
+tags: nginx
+category: nginx
+---
+
+# nginx配置文件结构
 ------------------------
 nginx由配置文件中的指令控制，通过指令可以配置nginx的行为。nginx指令分为简单指令和块指令。
 

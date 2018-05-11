@@ -1,15 +1,22 @@
-#npm教程
+---
+title: npm教程
+date: 2018-05-11 11:02:00
+tags: npm
+category: web
+---
+
+# npm教程
 ---------
 
-##npm安装
+## npm安装
 npm是随同NodeJS一起安装的包管理工具，类似于java开发中Maven。
 
-##npm配置查看及更改
+## npm配置查看及更改
 1. *npm config list*：查看npm配置项。
 2. *npm config ls -l*：查看npm所有配置项。
 3. *npm set key = value*：更改配置项key的值为value，*npm set registry="https：//registry.npm.taobao.org/"*->修改npm中央仓库。
 
-##npm安装依赖包
+## npm安装依赖包
 npm作为一款js的包管理工具,主要作用是对前端项目的依赖包进行管理。
 
 1. *npm init*命令可以创建一个npm包，类似于java中新建一个maven项目。根据提示，会生成一个package.json文件描述了包的信息，包括名称、版本、作者等信息，类似于maven中的pom文件。
