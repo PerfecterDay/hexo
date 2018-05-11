@@ -16,7 +16,7 @@ JAVA反射机制是在运行状态中，对于任意一个类，都能够知道�
 
 一个类有：成员变量、方法、构造方法、包等等信息，利用反射技术可以对一个类进行解剖，把各个组成部分映射成一个个对象。（其实：一个类中这些成员方法、构造方法等在Java中都有一个专门的类来描述）。如图是类的正常加载过程：反射的原理在与class对象。
 熟悉一下加载的时候：Class对象的由来是将class文件读入内存，并为之创建一个Class对象。
-<img src="pics/ClassObject.png" alt="spring mvc整体运行流程" title="java加载class文件">
+![字节码文件加载实例化Class对象](/pics/ClassObject.png)
 
 ## java.lang.Class类
 Class类是对java字节码文件的抽象，每个字节码文件加载到jvm后，jvm都会为其生成一个Class类的实例来描述该字节码文件，且每个类或接口的字节码文件只会生成一个Class类的实例。Class类的定义如下：
