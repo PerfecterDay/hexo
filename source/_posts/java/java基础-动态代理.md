@@ -5,7 +5,7 @@ tags: 动态代理
 category: java
 ---
 
-#Proxy
+# Proxy
     public class Proxy implements java.io.Serializable{
 
         public static Object newProxyInstance(ClassLoader loader,
