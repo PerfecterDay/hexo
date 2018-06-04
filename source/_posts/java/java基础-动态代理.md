@@ -38,3 +38,42 @@ InvocationHandler只有一个invoke方法，有三个参数，proxy是通过Prox
 
 
 如果有真正的被代理对象，及代理接口的实现类对象，则一般会在InvocationHandler中，保存一个代理接口实现类对象的引用，并在invoke方法中，通过调用Method类的invoke方法，第一个参数设为被代理对象，表示调用被代理对象（真实对象）的实现方法。
+
+
+# 动态代理原理
+JDK的 sun.misc.ProxyGenerator可以生成动态的代理对象，这个代理类在内部，拥有所代理的接口的所有方法对象(通过反射获得),并且这个代理类会实现所有代理接口的所有方法，并在各个实现方法内部，调用InvocationHandler的invoke方法，只不过不同实现方法中传递的方法对象和参数不同。通过代理对象调用接口方法，就是调用其内部实现的各个方法。
+
+流程如下：
+
+    代理类对象.接口方法()---->代理类对象内部实现的接口方法()----->InvocationHandler.invoke()方法。
+
+    interface A{
+      void say();
+    }
+
+    interface B{
+      void run();
+    }
+
+    Object o = Proxy.newProxyInstance(A.class.getClassLoader(),new Class[]{A.class,B.class},new Handler());
+
+    (A) o.say();
+    (B) o.run();
+
+实际上动态代理生成的类类似于下面这个类：
+    
+    class Proxy0 implements A,B{
+        InvocationHandler h;
+        Method say; //通过反射会初始化为A的say方法对象
+        Method run; //通过反射会初始化为B的run方法对象
+
+       public void say(){
+          h.invoke(this,m1,null);
+       }
+
+       public void run(){
+          h.invoke(this,m1,null);
+       }
+    }
+
+以上只是猜想，可以通过ProxyGenerator生成二进制文件，然后反编译出来验证结果，大体思想原理是这样的。
