@@ -1,11 +1,11 @@
 ---
-title: shiro中的Filter继承层次分析
+title: shiro中的`Filter`继承层次分析
 date: 2018-06-04 16:40:35
 tags: shiro
 category: shiro
 ---
 
-# shiro中的Filter继承层次分析
+# shiro中的`Filter`继承层次分析
 
 ## `AbstractFilter`直接实现`javax.servlet.Filter`接口
 有一个`javax.servlet.FilterConfig`类域，可以通过这个对象来获取Filter的一些信息。该对象由Servlet规范在调用Filter时，传递给Filter对象。
@@ -29,6 +29,8 @@ category: shiro
                 }
             }
         }
+`init()`方法会调用`onFilterConfigSet`方法，所以此方法是一个扩展点。
+
 ## `NameableFilter`继承自`AbstractFilter`
 该类添加了一个String类型的name域，用来为Filter命名，此name与FilterConfig中的FilterName不同，属于shiro为Filter自定义的名字。
 
@@ -42,19 +44,15 @@ category: shiro
     public final void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws ServletException, IOException {
             String alreadyFilteredAttributeName = this.getAlreadyFilteredAttributeName();
             if(request.getAttribute(alreadyFilteredAttributeName) != null) {
-                log.trace("Filter \'{}\' already executed.  Proceeding without invoking this filter.", this.getName());
                 filterChain.doFilter(request, response);
             } else if(this.isEnabled(request, response) && !this.shouldNotFilter(request)) {
-                log.trace("Filter \'{}\' not yet executed.  Executing now.", this.getName());
                 request.setAttribute(alreadyFilteredAttributeName, Boolean.TRUE);
-
                 try {
                     this.doFilterInternal(request, response, filterChain);
                 } finally {
                     request.removeAttribute(alreadyFilteredAttributeName);
                 }
             } else {
-                log.debug("Filter \'{}\' is not enabled for the current request.  Proceeding without invoking this filter.", this.getName());
                 filterChain.doFilter(request, response);
             }
 
@@ -105,29 +103,29 @@ Advice是增强的意思，类似Spring AOP中的Advice.该类并没有添加其
 该类重写了`preHandle`方法：
 
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-            if(this.appliedPaths != null && !this.appliedPaths.isEmpty()) {
-                Iterator var3 = this.appliedPaths.keySet().iterator();
+        if(this.appliedPaths != null && !this.appliedPaths.isEmpty()) {
+            Iterator var3 = this.appliedPaths.keySet().iterator();
 
-                String path;
-                do {
-                    if(!var3.hasNext()) {
-                        return true;
-                    }
-
-                    path = (String)var3.next();
-                } while(!this.pathsMatch(path, request));
-
-                log.trace("Current requestURI matches pattern \'{}\'.  Determining filter chain execution...", path);
-                Object config = this.appliedPaths.get(path);
-                return this.isFilterChainContinued(request, response, path, config);
-            } else {
-                if(log.isTraceEnabled()) {
-                    log.trace("appliedPaths property is null or empty.  This Filter will passthrough immediately.");
+            String path;
+            do {
+                if(!var3.hasNext()) {
+                    return true;
                 }
 
-                return true;
+                path = (String)var3.next();
+            } while(!this.pathsMatch(path, request));
+
+            log.trace("Current requestURI matches pattern \'{}\'.  Determining filter chain execution...", path);
+            Object config = this.appliedPaths.get(path);
+            return this.isFilterChainContinued(request, response, path, config);
+        } else {
+            if(log.isTraceEnabled()) {
+                log.trace("appliedPaths property is null or empty.  This Filter will passthrough immediately.");
             }
+
+            return true;
         }
+    }
 该方法首先用键遍历`appliedPaths` Map中的对象，对比request的路径和遍历对象的值，直到找到一个匹配的路径，这个过程中会用到`pathMatcher`路径解析器。如果有某个路径匹配request路径，调用
 
     Object config = this.appliedPaths.get(path);
@@ -187,7 +185,42 @@ WebUtils中的saveRequest方法定义：
 调用Subject的isAuthenticated()方法，返回该用户是否被认证过。
 
 ## `AuthenticatingFilter`继承自`AuthenticationFilter`
+该类主要是用来实现认证登录的功能的，该类重写了`isAccessAllowed`方法：
 
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         return super.isAccessAllowed(request, response, mappedValue) || !this.isLoginRequest(request, response) && this.isPermissive(mappedValue);
     }
+
+此外，该类还提供了`executeLogin`的登录方法：
+
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+        AuthenticationToken token = this.createToken(request, response);
+        if (token == null) {
+            String msg = "createToken method implementation returned null. A valid non-null AuthenticationToken must be created in order to execute a login attempt.";
+            throw new IllegalStateException(msg);
+        } else {
+            try {
+                Subject subject = this.getSubject(request, response);
+                subject.login(token);
+                return this.onLoginSuccess(token, subject, request, response);
+            } catch (AuthenticationException var5) {
+                return this.onLoginFailure(token, var5, request, response);
+            }
+        }
+    }
+子类可以在`onAccessDenied`方法之中调用`executeLogin`方法，即需要登录才能访问。表示执行登录操作。分析上述方法，可知登陆成功后，会执行`onLoginSuccess`方法，失败则执行`onLoginFailure`方法，这两个方法也是扩展点。
+
+
+## `AbstractShiroFilter`继承自`OncePerRequestFilter`
+这个类是实现shiro中url拦截的主要功能类，此类增加了三个域：
+
+    public abstract class AbstractShiroFilter extends OncePerRequestFilter {
+        private WebSecurityManager securityManager;
+        private FilterChainResolver filterChainResolver;
+        private boolean staticSecurityManagerEnabled = false;
+    }
+主要是前两个域：
+* `WebSecurityManager`：用来实现SecurityManager的所有功能.
+* `FilterChainResolver`：用来实现过滤器链解析功能。
+
+## `FormAuthenticationFilter`继承自`AuthenticatingFilter`

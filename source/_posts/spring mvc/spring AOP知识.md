@@ -287,7 +287,7 @@ around advice 比较特别, 它可以在一个方法的之前之前和之后添�
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
             // 开始
-            Object retVal = pjp.proceed();
+            Object retVal = pjp.proceed(); 
             stopWatch.stop();
             // 结束
             System.out.println("invoke method: " + pjp.getSignature().getName() + ", elapsed time: " + stopWatch.getTotalTimeMillis());
