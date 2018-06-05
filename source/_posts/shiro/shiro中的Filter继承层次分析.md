@@ -1,5 +1,5 @@
 ---
-title: shiro中的`Filter`继承层次分析
+title: shiro中的Filter继承层次分析
 date: 2018-06-04 16:40:35
 tags: shiro
 category: shiro
@@ -8,7 +8,13 @@ category: shiro
 # shiro中的`Filter`继承层次分析
 
 ## `AbstractFilter`直接实现`javax.servlet.Filter`接口
-有一个`javax.servlet.FilterConfig`类域，可以通过这个对象来获取Filter的一些信息。该对象由Servlet规范在调用Filter时，传递给Filter对象。
+
+    public abstract class AbstractFilter extends ServletContextSupport implements Filter{
+        protected FilterConfig filterConfig;
+        ..........
+    }
+
+该类有一个`javax.servlet.FilterConfig`类域，可以通过这个对象来获取Filter的一些信息。该对象由Servlet规范在调用Filter时，传递给Filter对象。
 
 该类重写了Filter的init()方法，
 
@@ -223,4 +229,44 @@ WebUtils中的saveRequest方法定义：
 * `WebSecurityManager`：用来实现SecurityManager的所有功能.
 * `FilterChainResolver`：用来实现过滤器链解析功能。
 
-## `FormAuthenticationFilter`继承自`AuthenticatingFilter`
+`AbstractShiroFilter`重写了`doFilterInternal`方法：
+
+    protected void doFilterInternal(ServletRequest servletRequest, ServletResponse servletResponse, final FilterChain chain) throws ServletException, IOException {
+        Throwable t = null;
+            ....
+            final ServletRequest msg = this.prepareServletRequest(servletRequest, servletResponse, chain);
+            final ServletResponse response = this.prepareServletResponse(msg, servletResponse, chain);
+            WebSubject subject = this.createSubject(msg, response);
+            subject.execute(new Callable() {
+                public Object call() throws Exception {
+                    AbstractShiroFilter.this.updateSessionLastAccessTime(msg, response);
+                    AbstractShiroFilter.this.executeChain(msg, response, chain);
+                    return null;
+                }
+            });
+       ....
+    }
+主要是调用`updateSessionLastAccessTime`、`executeChain`两个方法，`updateSessionLastAccessTime`方法用来更新session，我们主要看一下`executeChain`方法：
+    
+    protected void executeChain(ServletRequest request, ServletResponse response, FilterChain origChain) throws IOException, ServletException {
+        FilterChain chain = this.getExecutionChain(request, response, origChain);
+        chain.doFilter(request, response);
+    }
+
+    protected FilterChain getExecutionChain(ServletRequest request, ServletResponse response, FilterChain origChain) {
+        FilterChain chain = origChain;
+        FilterChainResolver resolver = this.getFilterChainResolver();
+        if(resolver == null) {
+            ....
+            return origChain;
+        } else {
+            FilterChain resolved = resolver.getChain(request, response, origChain);
+            if(resolved != null) {
+                chain = resolved;
+            } else {
+               ....
+            }
+            return chain;
+        }
+    }
+可见，主要功能是使用`FilterChainResolver`域来解析出一个`FilterChain`对象，并调用`doFilter`方法.
