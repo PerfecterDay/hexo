@@ -70,3 +70,49 @@ category: shiro
         }
     }
 不匹配就报错。
+
+## `AuthorizingRealm`类
+    
+    public abstract class AuthorizingRealm extends AuthenticatingRealm implements Authorizer, Initializable, PermissionResolverAware, RolePermissionResolverAware {
+        private static final Logger log = LoggerFactory.getLogger(AuthorizingRealm.class);
+        private static final String DEFAULT_AUTHORIZATION_CACHE_SUFFIX = ".authorizationCache";
+        private static final AtomicInteger INSTANCE_COUNT = new AtomicInteger();
+        private boolean authorizationCachingEnabled;
+        private Cache<Object, AuthorizationInfo> authorizationCache;
+        private String authorizationCacheName;
+        private PermissionResolver permissionResolver;
+        private RolePermissionResolver permissionRoleResolver;
+    }
+增加了许多和权限解析相关的域。
+
+    protected AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
+        if (principals == null) {
+            return null;
+        } else {
+            AuthorizationInfo info = null;
+            Cache<Object, AuthorizationInfo> cache = this.getAvailableAuthorizationCache();
+            Object key;
+            if (cache != null) {
+                key = this.getAuthorizationCacheKey(principals);
+                info = (AuthorizationInfo)cache.get(key);
+            }
+            if (info == null) {
+                info = this.doGetAuthorizationInfo(principals);
+                if (info != null && cache != null) {
+                    
+                    key = this.getAuthorizationCacheKey(principals);
+                    cache.put(key, info);
+                }
+            }
+            return info;
+        }
+    }
+也是首先尝试从缓存获取权限信息，如果失败则调用`doGetAuthorizationInfo`方法获取权限信息，获取成功则将其存入缓存.
+
+此外，该类还实现了`Authorizer`接口中的方法。这些方法在`subject`对象调用鉴权相关的方法时会被调用，如`isPermitted`、`checkPermission`等方法。
+
+总结：
+1. 当`subject`调用`login`方法时，会调用`Realm`中的`getAuthenticationInfo`或`doGetAuthenticationInfo`方法；
+2. 当`subject`调用鉴权相关的方法时，会调用`Realm`中的`getAuthorizationInfo`或`doGetAuthenticationInfo`方法；
+
+大体的方向是`subject`-->`securityManager`---->`Authenticator`或者`Authorizer`--->`Realm`.
