@@ -6,6 +6,10 @@ category: shiro
 ---
 
 # shiro中的`Filter`继承层次分析
+首先看一下shiro中的拦截器继承类图：
+
+![shiro拦截器类图](/pics/shiro-filter-hierachy.png)
+
 
 ## `AbstractFilter`直接实现`javax.servlet.Filter`接口
 
