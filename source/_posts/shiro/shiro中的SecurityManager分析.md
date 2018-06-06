@@ -93,4 +93,7 @@ SecurityManager是shiro中的核心管理类，是一个接口，首先看一下
        this.onSuccessfulLogin(token, info, loggedIn);
        return loggedIn;
    }
-可见会调用`authenticate`方法，上文分析到，`authenticate`方法实际上会调用保存的`Authenticator`的`authenticate`方法，分析`Authenticator`会得知，其最终会调用`Realm`的`getAuthenticationInfo`方法。由此，将登陆操作和`Realm`对象关联起来了.
+可见会调用`authenticate`方法，上文分析到，`authenticate`方法实际上会调用保存的`Authenticator`的`authenticate`方法，分析`Authenticator`会得知，其最终会调用`Realm`的`getAuthenticationInfo`方法。由此，将登陆操作和`Realm`对象关联起来了.并且，认证成功后，会利用认证信息和token及现在subject生成一个新的`Subject`的已认证对象：
+  
+       Subject loggedIn = this.createSubject(token, info, subject);
+  
