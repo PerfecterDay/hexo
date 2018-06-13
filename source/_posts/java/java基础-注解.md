@@ -1,7 +1,7 @@
 ---
 title: java-注解
 date: 2018-05-06 11:02:00
-tags: 反射
+tags: 注解
 category: java
 ---
 # java注解

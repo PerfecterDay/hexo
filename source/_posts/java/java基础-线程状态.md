@@ -19,7 +19,7 @@ Java中的线程的生命周期大体可分为5种状态。
 
 ## 一.线程的状态图
 
-![线程状态图](/pics/tthread-state2.jpg)
+![线程状态图](/pics/thread-state2.jpg)
 ![线程状态图](/pics/thread-state.jpg)
 
 ## 二.初始状态
