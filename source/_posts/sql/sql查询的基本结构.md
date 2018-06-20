@@ -15,7 +15,7 @@ category: sql
 
 ![sql查询的基本结构](/pics/select-1.jpg)
 
-每个`A<sub>i</sub>`代表一个属性，每个`r<sub>i</sub>`代表一个关系，P是一个谓词，如果省略 **where** 子句，那么谓词P为true。
+每个 **A<sub>i</sub>** 代表一个属性，每个 **r<sub>i</sub>** 代表一个关系，P是一个谓词，如果省略 **where** 子句，那么谓词P为true。
 
 通常来说，一个SQL查询的含义可以理解如下：
 
