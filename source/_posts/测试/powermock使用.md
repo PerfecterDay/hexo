@@ -24,7 +24,7 @@ Powermockito.mock()方法主要是根据 class 参数创建一个对应的 mock 
     }
 假设要测试上述方法，但是`EmployeeDao`对象并不可用且不是注入到`EmployeeService`的成员变量中的，我们无法mock一个dao然后设置到`EmployeeService`的成员变量上。
 
-    EmployeeDao employeeDao = PowerMockito.mock(EmployeeDao.class); try {
+    EmployeeDao employeeDao = PowerMockito.mock(EmployeeDao.class);
     PowerMockito.whenNew(EmployeeDao.class).withNoArguments() .thenReturn(employeeDao);
     PowerMockito.when(employeeDao.getTotal()).thenReturn(10);
 
