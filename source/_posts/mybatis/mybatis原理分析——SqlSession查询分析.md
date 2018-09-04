@@ -3,7 +3,7 @@ title: mybatis 原理分析 —— SqlSession 查询分析
 date: 2018-07-13  16:26:53
 tags: mybatis
 category: mybatis
---- 
+---
 
 在前面的博文中，我们分析了 mybatis 使用接口编程时，用到了动态代理技术，实际上在代理对象中还是使用了 SqlSession 的相应方法去执行数据库操作，与直接使用 SqlSession 执行 sql 语句一样。所以，此文我们分析一下 SqlSession 执行 sql 的过程。
 
