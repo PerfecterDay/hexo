@@ -1,5 +1,5 @@
 ---
-title: mybatis 基本配置
+title: mybatis 基本配置(1)
 date: 2018-07-16  15:30:13
 tags: mybatis
 category: mybatis

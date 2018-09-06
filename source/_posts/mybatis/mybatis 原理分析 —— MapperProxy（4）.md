@@ -1,5 +1,5 @@
 ---
-title: mybatis 原理分析 —— MapperProxy
+title: mybatis 原理分析 —— MapperProxy(4)
 date: 2018-07-13  09:45:12
 tags: mybatis
 category: mybatis
