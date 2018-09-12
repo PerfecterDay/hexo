@@ -5,3 +5,6 @@ db.json
 node_modules/
 public/
 .deploy*/
+.vscode/
+package-lock.json
+hexo.code-workspace
