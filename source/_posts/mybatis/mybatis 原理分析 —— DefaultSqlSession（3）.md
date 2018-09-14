@@ -1,5 +1,5 @@
 ---
-title: mybatis 原理分析 —— DefaultSqlSession(3)
+title: mybatis 原理分析(3) —— DefaultSqlSession
 date: 2018-07-13  10:00:02
 tags: mybatis
 category: mybatis
