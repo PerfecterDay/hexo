@@ -1,5 +1,5 @@
 ---
-title: springmvc中DispatcherServlet分析
+title: springmvc中DispatcherServlet初始化分析
 date: 2018-09-27 21:54:23
 tags: spring
 category: spring
@@ -56,36 +56,18 @@ DispatcherServlet ----> FrameworkServlet -----> HttpServletBean ----> HttpServle
 		if (wac == null) {
 			wac = createWebApplicationContext(rootContext);
 		}
-
 		if (!this.refreshEventReceived) {
 			onRefresh(wac);
 		}
 		return wac;
 	}
-跟着看 `configureAndRefreshWebApplicationContext` 方法：
-
-    protected void configureAndRefreshWebApplicationContext(ConfigurableWebApplicationContext wac) {
-		wac.setServletContext(getServletContext());
-		wac.setServletConfig(getServletConfig());
-		wac.setNamespace(getNamespace());
-		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));
-
-		ConfigurableEnvironment env = wac.getEnvironment();
-		if (env instanceof ConfigurableWebEnvironment) {
-			((ConfigurableWebEnvironment) env).initPropertySources(getServletContext(), getServletConfig());
-		}
-
-		postProcessWebApplicationContext(wac);
-		applyInitializers(wac);
-		wac.refresh();
-	}
-
 一路跟到 `FrameworkServlet` 的 `createWebApplicationContext` 方法：
 
     protected WebApplicationContext createWebApplicationContext(@Nullable ApplicationContext parent) {
 		ConfigurableWebApplicationContext wac =
 				(ConfigurableWebApplicationContext) BeanUtils.instantiateClass(contextClass);
 		wac.setEnvironment(getEnvironment());
+		//设置 parent 上下文
 		wac.setParent(parent);
 		String configLocation = getContextConfigLocation();
 		if (configLocation != null) {
@@ -94,6 +76,23 @@ DispatcherServlet ----> FrameworkServlet -----> HttpServletBean ----> HttpServle
 		configureAndRefreshWebApplicationContext(wac);
 		return wac;
 	}
+
+跟着看 `configureAndRefreshWebApplicationContext` 方法：
+
+    protected void configureAndRefreshWebApplicationContext(ConfigurableWebApplicationContext wac) {
+		wac.setServletContext(getServletContext());
+		wac.setServletConfig(getServletConfig());
+		wac.setNamespace(getNamespace());
+		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));
+		ConfigurableEnvironment env = wac.getEnvironment();
+		if (env instanceof ConfigurableWebEnvironment) {
+			((ConfigurableWebEnvironment) env).initPropertySources(getServletContext(), getServletConfig());
+		}
+		postProcessWebApplicationContext(wac);
+		applyInitializers(wac);
+		wac.refresh();
+	}
+
 于是可以看出， `DispatcherServlet` 初始化了 ApplicationContext。
 
 再看 `DispatcherServlet` 的 `onRefresh` 方法：
