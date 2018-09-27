@@ -33,6 +33,7 @@ DispatcherServlet ----> FrameworkServlet -----> HttpServletBean ----> HttpServle
         initFrameworkServlet();	
 	}
 继续跟到 `initWebApplicationContext` 方法：
+
     protected WebApplicationContext initWebApplicationContext() {
 		WebApplicationContext rootContext =
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
