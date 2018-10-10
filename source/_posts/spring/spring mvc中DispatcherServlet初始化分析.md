@@ -6,7 +6,7 @@ category: spring
 ---
 
 首先看 `DispatcherServlet` 继承关系：
-DispatcherServlet ----> FrameworkServlet -----> HttpServletBean ----> HttpServlet
+`DispatcherServlet` ----> `FrameworkServlet` -----> `HttpServletBean` ----> `HttpServlet`
 
 找到 `HttpServletBean` 的 `init` 方法：
 
