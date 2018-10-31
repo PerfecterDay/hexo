@@ -9,18 +9,10 @@ category: spring
 # Spring AOP知识总结
 
 ## 概念术语
-### 切面 (aspect)
-`aspect` 由 `pointcut` 和 `advice` 组成, 它既包含了横切逻辑的定义, 也包括了连接点的定义. Spring AOP就是负责实施切面的框架, 它将切面所定义的横切逻辑织入到切面所指定的连接点中.
-AOP的工作重心在于如何将增强织入目标对象的连接点上, 这里包含两个工作:
-
-1. 如何通过 `pointcut` 和 `advice` 定位到特定的 joinpoint上
-
-2. 如何在 `advice` 中编写切面代码.
-
 ### 连接点(join point)
     a point during the execution of a program, such as the execution of a method or the handling of an exception. In Spring AOP, a join point always represents a method execution.
 
-程序运行中的一些时间点, 例如一个方法的执行, 或者是一个异常的处理.在 Spring AOP 中, `join point` 总是方法的执行点, 即只有方法连接点.不可以在类上增强。
+程序运行中的一些时间点, 例如一个方法的执行, 或者是一个异常的处理.在 Spring AOP 中, `join point` 总是方法的执行点, 即只有方法连接点,不可以在类上增强。
 
 ### 切点(point cut)
 匹配 `join point` 的谓词(a predicate that matches join points).
@@ -29,10 +21,24 @@ AOP的工作重心在于如何将增强织入目标对象的连接点上, 这里
 
 简而言之，切点就是用来筛选哪些连接点需要织入增强代码的。
 
+![Spring 中 Pointcut 类图](/pics/Pointcut.png)
+
 ### 关于`join point` 和 `point cut` 的区别
-在 Spring AOP 中, 所有的方法执行都是 `join point`. 而 `point cut` 是一个描述信息, 它修饰的是 `join point`, 通过 `point cut`, 我们就可以确定哪些 `join point` 可以被织入 Advice. 因此 `join point` 和 `point cut` 本质上就是两个不同纬度上的东西.
+在 Spring AOP 中, 所有的方法执行都是 `join point`. 而 `point cut` 是一个描述信息, 它修饰的是 `join point`, 通过 `point cut`, 我们就可以确定哪些 `join point` 可以被织入 Advice. 因此 `join point` 相当于数据库中的记录， 而 `point cut` 相当于带有查询条件查询出来的记录。
 `advice` 是在 `join point `上执行的, 而 `point cut` 规定了哪些 `join point` 可以执行哪些 `advice`.
 
+### 增强（ Advice )
+![Spring 中 Advice 继承类图](/pics/Advice.png)
+
+### 切面 (aspect)
+`aspect` 由 `pointcut` 和 `advice` 组成, 它既包含了横切逻辑的定义, 也包括了连接点的定义. Spring AOP就是负责实施切面的框架, 它将切面所定义的横切逻辑织入到切面所指定的连接点中.
+AOP的工作重心在于如何将增强织入目标对象的连接点上, 这里包含两个工作:
+
+1. 如何通过 `pointcut` 和 `advice` 定位到特定的 joinpoint 上
+2. 如何在 `advice` 中编写切面代码.
+
+Spring 中使用 org.springframework.aop.Advisor 接口表示切面。
+![Spring 中 Advisor 类图](/pics/Advisor.png)
 
 ### 织入(Weaving)
 将 aspect 和其他对象连接起来, 并创建 adviced object 的过程.
@@ -44,6 +50,11 @@ AOP的工作重心在于如何将增强织入目标对象的连接点上, 这里
 * 动态代理织入, 在运行期为目标类添加增强(Advice)生成子类的方式.
 
 Spring 采用动态代理织入, 而AspectJ采用编译器织入和类装载期织入.
+
+## Spring 自动创建代理
+Spring 提供了自动代理机制，让容器自动生成代理，把开发人员从繁琐的配置工作中解放出来。在内部，Spring 使用 BeanPostProcessor 自动完成这项工作。
+
+![Spring 中 ProxyCreator 类图](/pics/ProxyCreator.png)
 
 ## 彻底理解 aspect, join point, point cut, advice
 看完了上面的理论部分知识, 我相信还是会有不少朋友感觉到 AOP 的概念还是很模糊, 对 AOP 中的各种概念理解的还不是很透彻. 其实这很正常, 因为 AOP 中的概念是在是太多了, 我当时也是花了老大劲才梳理清楚的.
@@ -295,4 +306,3 @@ around advice 比较特别, 它可以在一个方法的之前之前和之后添�
         }
     }
 around advice 和前面的 before advice 差不多, 只是我们把注解 @Before 改为了 @Around 了.
-
