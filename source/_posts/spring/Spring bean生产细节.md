@@ -1,0 +1,9 @@
+ConfigurationClassPostProcessor
+ConfigurationClassBeanDefinitionReader
+
+AbstractBeanFactory.registerCustomEditors 方法注册自定义属性编辑器
+
+InfrastructureAdvisorAutoProxyCreator
+BeanFactoryTransactionAttributeSourceAdvisor
+ProxyFactory
+TransactionInterceptor
