@@ -1,5 +1,5 @@
 ---
-title: java-动态代理
+title: java基础-动态代理
 date: 2018-05-10  21:49:35
 tags: 动态代理
 category: java

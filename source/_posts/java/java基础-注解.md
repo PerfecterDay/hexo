@@ -1,5 +1,5 @@
 ---
-title: java-注解
+title: java基础-注解
 date: 2018-05-06 11:02:00
 tags: 注解
 category: java
@@ -27,7 +27,7 @@ category: java
         String comments();
     }
 + 注解方法不能带有参数；
-+ 注解方法返回值类型限定为：基本类型、String、Enums、Class、Annotation或者是这些类型的数组；
++ 注解方法返回值类型限定为： 基本类型 、String 、Enums 、Class 、Annotation 或者是这些类型的数组；
 + 注解方法可以有默认值；
 + 注解本身能够包含元注解，元注解被用来注解其它注解。
 
@@ -65,3 +65,10 @@ category: java
         }
      
     }
+
+## 编译时处理注解
+APT(Annotation Processing Tool)是一种处理注解的工具，它对源代码文件进行检测，并找出源文件所包含的注解信息，然后针对注解信息进行额外的处理。
+
+Java 提供的 javac.exe 编译工具有一个 `-processor` 选项，该选项可以指定一个注解处理器，如果编译时，指定了注解处理器，那么这个注解处理器将会起作用。
+
+每个注解处理器都需要实现 `javax.annotation.processing` 包下的 `Processor` 接口。不过实现该接口必须实现它里边的所有方法，因此通常会采用继承 `AbstractProcessor` 的方式来实现注解处理器。一个注解处理器可以处理一个或多个注解。

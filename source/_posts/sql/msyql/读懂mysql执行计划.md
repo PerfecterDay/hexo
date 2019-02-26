@@ -2,7 +2,7 @@
 title: 读懂mysql执行计划
 date: 2018-06-19 15:22:28
 tags: mysql
-category: mysql
+category: sql
 ---
 
 在MySQL使用 **explain** 关键字来查看SQL的执行计划，如下所示：

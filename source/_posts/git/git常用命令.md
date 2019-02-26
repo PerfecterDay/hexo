@@ -6,11 +6,12 @@ category: git
 ---
 
 ## git 常用命令
+0. git clean: 删除工作区中未跟踪（不在版本库也未索引的）的文件
 1. git add:将文件添加到暂存区
 2. git ls-files --satge:查看暂存区的文件
 3. git rm filename:从暂存区和工作区删除某个文件，提交后，版本库中会删除这个文件
-4. git checkout filename:从暂存区恢复工作区中的文件，通常是想放弃对工作区中的修改或者误删了工作区文件
-5. git checkout head filename:从版本库中恢复某个文件，当你删除了工作区中的文件，又删除了暂存区中的文件，想恢复文件可以用这个命令
+4. git checkout head filename:从暂存区恢复工作区中的文件，通常是想放弃对工作区中的修改或者误删了工作区文件
+5. git reset filename:从版本库中恢复某个文件，当你删除了工作区中的文件，又删除了暂存区中的文件，想恢复文件可以用这个命令
 6. git commit:将暂存区中的文件提交到版本库
 7. git commit --amend：将本次提交与前一次的提交合并为一次提交
 8.  git checkout branchname:切换分支
@@ -25,25 +26,27 @@ category: git
 17. git stash pop:将保存的内容恢复到工作区
 
 ## git 分支
+0. git checkout -b 本地分支名x origin/远程分支名x : 在本地新建分支x，并自动切换到该本地分支x
 1. git branch -a:查看所有分支
-2. git branch <BranchName>:创建 BranchName 分支
-3. git checkout <BranchName>:切换到 BranchName 分支
-4. git checkout -b <BranchName>:在当前分支基础上新建 BranchName 分支，并切换到 BranchName 分支
-5. git brnch -d <BranchName>:删除 BranchName 分支
+2. git branch &lt;BranchName&gt;:创建 BranchName 分支
+3. git checkout &lt;BranchName&gt;:切换到 BranchName 分支
+4. git checkout -b &lt;BranchName&gt;:在当前分支基础上新建 BranchName 分支，并切换到 BranchName 分支
+5. git brnch -d &lt;BranchName&gt;:删除 BranchName 分支
+6. git merge &lt;BranchName&gt;: 将 BranchName 合并到当前分支
+7. git rebase &lt;targetBranch&gt; &lt;sourceBranch&gt;: Rebase 实际上就是取出 sourceBranch 的一系列的提交记录，“复制”它们，然后在targetBranch 的后边逐个的放下去，创造更线性的提交历史。sourceBranch 省略时，表示将当前分支 rebase到 targetBranch。
 
 ## git远程命令
 1. git clone: 从远程库克隆
 2. git remote :显示远程主机
-3. git remote add <主机名> <网址>:添加远程主机
-4. git remote rm <主机名>：删除远程主机
-5. git remote rename <原主机名> <新主机名>：远程主机的改名
-6. git fetch <远程主机名>：取回远程主机所有更新
-7. git checkout -b 本地分支名x origin/远程分支名x : 在本地新建分支x，并自动切换到该本地分支x
+3. git remote add &lt;主机名&gt; &lt;网址&gt;:添加远程主机
+4. git remote rm &lt;主机名&gt;：删除远程主机
+5. git remote rename &lt;原主机名&gt; &lt;新主机名&gt;：远程主机的改名
+6. git fetch &lt;远程主机名&gt;：取回远程主机所有更新
 8. git fetch origin 远程分支名x:本地分支名x : 在本地新建分支x，但是不会自动切换到该本地分支x，需要手动checkout
-9. git fetch <远程主机名> <分支名>：取回远程主机指定分支的更新
-10. git pull <远程主机名> <远程分支名>:<本地分支名>：取回远程主机某个分支的更新，再与本地的指定分支合并
-11. git pull <远程主机名> <远程分支名>：取回远程主机某个分支的更新，再与本地的当前分支合并
-12. git branch --set-upstream <本地分支名> <远程主机名>/<远程分支名> ：手动建立追踪关系
+9. git fetch &lt;远程主机名&gt; &lt;分支名&gt;：取回远程主机指定分支的更新
+10. git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;：取回远程主机某个分支的更新，再与本地的指定分支合并
+11. git pull &lt;远程主机名&gt; &lt;远程分支名&gt;：取回远程主机某个分支的更新，再与本地的当前分支合并
+12. git branch --set-upstream &lt;本地分支名&gt; &lt;远程主机名&gt;/&lt;远程分支名&gt; ：手动建立追踪关系
 13. git pull origin : 如果当前分支与远程分支存在追踪关系，git pull就可以省略远程分支名
 14. git pull :如果当前分支只有一个追踪分支，连远程主机名都可以省略
 15.  git push remote localbranch:remotebranch : 将本地localbranch分支推送到remote的remotebranch分支上
@@ -76,4 +79,4 @@ category: git
 
 遇到不可自动合并冲突时，git会将这些状态写入到暂存区。与我们讨论不同的是，git使用1，2，3标记文件，1表示文件的base版本，2表示当前的分支的版本，3表示要合并分支的版本。
 git merge   合并时也会有 fast-forward 模式。
-1. git merge <分支名>： 将指定分支合并到所在分支
+1. git merge &lt;分支名&gt;： 将指定分支合并到所在分支
