@@ -1,5 +1,5 @@
 ---
-title: java-NIO
+title: java基础-NIO
 date: 2018-11-03  08:43:24
 tags: NIO
 category: java
@@ -97,12 +97,97 @@ ByteBuffer 类中有五个 put() 方法：
     byte array[] = new byte[1024];
     ByteBuffer buffer = ByteBuffer.wrap( array );
 
+## NIO 网络编程的一般步骤
+
+### 打开一个 ServerSocketChannel
+为了接收连接，我们需要一个 `ServerSocketChannel` 。事实上，我们要监听的每一个端口都需要有一个 `ServerSocketChannel` 。对于每一个端口，我们打开一个 `ServerSocketChannel` ，如下所示：
+```
+ServerSocketChannel ssc = ServerSocketChannel.open();
+ssc.configureBlocking( false );
+ ServerSocket ss = ssc.socket();
+InetSocketAddress address = new InetSocketAddress( ports[i] );
+ss.bind( address );
+```
+第一行创建一个新的 `ServerSocketChannel` ，最后三行将它绑定到给定的端口。第二行将 `ServerSocketChannel` 设置为*非阻塞*的 。我们必须对每一个要使用的套接字通道调用这个方法，否则异步 I/O 就不能工作。
+
 ### Selector
-Selector 就是您注册对各种 I/O 事件的兴趣的地方，而且当那些事件发生时，就是这个对象告诉您所发生的事件。
+`Selector` 就是您注册对各种 I/O 事件的兴趣的地方，而且当那些事件发生时，就是这个对象告诉您所发生的事件。
 我们关心某个channel是否发生了读写或者Accept事件，就把这个channel和相应的事件通过channel的register方法注册到selector对象上，这样selector会在这些channel上发生了你感兴趣的事件时通知你。
 
 所以，我们需要做的第一件事就是创建一个 Selector：
     
     Selector selector = Selector.open();
+然后，我们将对不同的*通道对象*调用 `register()` 方法，以便注册我们对这些对象中发生的 I/O 事件的兴趣。r`egister()` 的第一个参数总是这个 Selector。
 
+### 选择键
+下一步是将新打开的 `ServerSocketChannel` 注册到 `Selector` 上。为此我们使用 `ServerSocketChannel.register()` 方法，如下所示：
+```
+SelectionKey key = ssc.register( selector, SelectionKey.OP_ACCEPT );
+```
+`register()` 的第一个参数总是这个 `Selector` 。第二个参数是 `OP_ACCEPT` ，这里它指定我们想要监听 accept 事件，也就是在新的连接建立时所发生的事件。这是适用于 `ServerSocketChannel` 的唯一事件类型。
 
+请注意对 `register()` 的调用的返回值。 `SelectionKey` 代表这个通道在此 `Selector` 上的这个注册。当某个 `Selector` 通知您某个传入事件时，它是通过提供对应于该事件的 `SelectionKey` `来进行的。SelectionKey` 还可以用于取消通道的注册。
+
+### 内部循环
+现在已经注册了我们对一些 I/O 事件的兴趣，下面将进入主循环。使用 `Selector` 的几乎每个程序都像下面这样使用内部循环：
+```
+int num = selector.select();
+Set selectedKeys = selector.selectedKeys();
+Iterator it = selectedKeys.iterator();
+while (it.hasNext()) {
+     SelectionKey key = (SelectionKey)it.next();
+     // ... deal with I/O event ...
+}
+```
+首先，我们调用 `Selector` 的 `select()` 方法。这个方法会阻塞，直到至少有一个已注册的事件发生。当一个或者更多的事件发生时， `select()` 方法将返回所发生的事件的数量。
+
+接下来，我们调用 `Selector` 的 `selectedKeys()` 方法，它返回发生了事件的 `SelectionKey` 对象的一个集合 。
+
+我们通过迭代 `SelectionKeys` 并依次处理每个 `SelectionKey` 来处理事件。对于每一个 `SelectionKey` ，您必须确定发生的是什么 I/O 事件，以及这个事件影响哪些 I/O 对象。
+
+### 监听新连接
+程序执行到这里，我们仅注册了 `ServerSocketChannel` ，并且仅注册它们“接收”事件。为确认这一点，我们对 SelectionKey 调用 `readyOps()` 方法，并检查发生了什么类型的事件：
+```
+if ((key.readyOps() & SelectionKey.OP_ACCEPT)
+     == SelectionKey.OP_ACCEPT) {
+     // Accept the new connection
+     // ...
+}
+```
+可以肯定地说， `readOps()` 方法告诉我们该事件是新的连接。
+
+### 接受新的连接
+因为我们知道这个服务器套接字上有一个传入连接在等待，所以可以安全地接受它；也就是说，不用担心 accept() 操作会阻塞：
+```
+ServerSocketChannel ssc = (ServerSocketChannel)key.channel();
+SocketChannel sc = ssc.accept();
+```
+下一步是将新连接的 SocketChannel 配置为非阻塞的。而且由于接受这个连接的目的是为了读取来自套接字的数据，所以我们还必须将 SocketChannel 注册到 Selector上，如下所示：
+```
+sc.configureBlocking( false );
+SelectionKey newKey = sc.register( selector, SelectionKey.OP_READ );
+```
+注意我们使用 register() 的 OP_READ 参数，将 SocketChannel 注册用于 **读取** 而不是 **接受** 新连接。
+
+### 删除处理过的 SelectionKey
+在处理 SelectionKey 之后，我们几乎可以返回主循环了。但是我们必须首先将处理过的 SelectionKey 从选定的键集合中删除。如果我们没有删除处理过的键，那么它仍然会在主集合中以一个激活的键出现，这会导致我们尝试再次处理它。我们调用迭代器的 `remove()` 方法来删除处理过的 SelectionKey：
+
+    it.remove();
+现在我们可以返回主循环并接受从一个套接字中传入的数据(或者一个传入的 I/O 事件)了。
+
+### 处理传入的 I/O 数据
+当来自一个套接字的数据到达时，它会触发一个 I/O 事件。这会导致在主循环中调用 Selector.select()，并返回一个或者多个 I/O 事件。这一次， SelectionKey 将被标记为 OP_READ 事件，如下所示：
+```
+if ((key.readyOps() & SelectionKey.OP_READ)
+     == SelectionKey.OP_READ) {
+     // Read the data
+     SocketChannel sc = (SocketChannel)key.channel();
+     // ...
+}
+```
+与以前一样，我们取得发生 I/O 事件的通道并处理它。在本例中，由于这是一个 echo server，我们只希望从套接字中读取数据并马上将它发送回去。
+
+### 回到主循环
+每次返回主循环，我们都要调用 select 的 Selector()方法，并取得一组 SelectionKey。每个键代表一个 I/O 事件。我们处理事件，从选定的键集中删除 SelectionKey，然后返回主循环的顶部。
+
+在现实的应用程序中，您需要通过将通道从 Selector 中删除来处理关闭的通道。而且您可能要使用多个线程。创建一个线程池来负责 I/O 事件处理中的耗时部分会更有意义。

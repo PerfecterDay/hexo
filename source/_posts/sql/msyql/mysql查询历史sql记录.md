@@ -2,7 +2,7 @@
 title: mysql 历史sql查询
 date: 2018-10-23 13:50:21
 tags: mysql
-category: mysql
+category: sql
 ---
 
 
