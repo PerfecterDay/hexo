@@ -6,6 +6,8 @@ category: maven
 ---
 
 mvn dependency:tree -Dverbose ：输出依赖树，解决依赖冲突时有用
+
 -U :强制更新本地库
 
  mvn clean cobertura:cobertura -Dcobertura.report.format=html
+
