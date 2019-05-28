@@ -40,6 +40,8 @@ Powermockito.mock()方法主要是根据 class 参数创建一个对应的 mock 
 其实相当于mock了`EmployeeDao`的构造函数。最后一行的`verify`方法可以验证`addEmployee`方法是否被调用了。
 
 ## mock static方法
+需要注意的是，当你想 mock static 方法时，你必须使用
+`@PrepareForTest(需要测试的类.class)` 注，这样的话，在需要测试类中使用的类的静态方法会使用你mock后的。
 
     PowerMockito.mockStatic(EmployeeUtils.class);
     PowerMockito.when(EmployeeUtils.getEmployeeCount()).thenReturn(10);
@@ -83,3 +85,10 @@ Powermockito.mock()方法主要是根据 class 参数创建一个对应的 mock 
       doThrow(new RuntimeException()).when(StaticList.class);
       StaticList.clear();
 3. 对于 spy 的对象， doReturn/when 不会执行 mock的方法，而 thenReturn/when 会执行方法。
+
+## mock void 方法
+```
+doThrow(new RuntimeException()).when(mockKafka).publishMonitoredCompanyData(Mockito.anyList());
+
+doNothing().when(mockKafka).publishMonitoredCompanyData(Mockito.anyList());
+```
