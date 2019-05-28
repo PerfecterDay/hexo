@@ -7,7 +7,7 @@ category: java
 原文：https://blog.csdn.net/briblue/article/details/54973413 
 
 ## Java语言系统自带有三个类装载器
-+ `Bootstrap ClassLoader` :根装载器，主要加载核心类库，`%JRE_HOME%\jre\lib`(1.8) 下的 `rt.jar` 、`resources.jar` 、`charsets.jar` 和其它类。另外需要注意的是可以通过启动 JVM 时指定`-Xbootclasspath` 和路径来改变 `Bootstrap ClassLoader` 的加载目录。比如 `java -Xbootclasspath/a:path`， `/a:path` 被追加到 `Bootstrap ClassLoader` 默认的加载路径中。
++ `Bootstrap ClassLoader` :根装载器，主要加载核心类库，`%JRE_HOME%\jre\lib`(1.8) 下的 `rt.jar` 、`resources.jar` 、`charsets.jar` 和其它类。另外需要注意的是可以通过启动 JVM 时指定`-Xbootclasspath` 和路径来改变 `Bootstrap ClassLoader` 的加载目录。比如 `java -Xbootclasspath/a:path`， `path` 被追加到 `Bootstrap ClassLoader` 默认的加载路径中。
 + `Extention ClassLoader`: 扩展类装载器，加载目录 `%JRE_HOME%\jre\lib\ext`(1.8) 目录下的 jar 包和 class 文件。还可以加载 `-D java.ext.dirs` 选项指定目录下的 jar 和类。
 + `App ClassLoader`: 应用类装载器，加载当前应用的 `classpath` 的所有类。
 
