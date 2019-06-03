@@ -4,7 +4,8 @@ date: 2019-01-02 21:14:27
 tags: js
 category: js
 ---
-Js最常用的就是 Javascript 标签，然而许多 web开发者并不全都指导下面这些知识
+
+Js最常用的就是 Javascript 标签，然而许多 web开发者并不全都知道下面这些知识。
 
 
 ## Javascript 标签的6个属性
@@ -17,8 +18,7 @@ Js最常用的就是 Javascript 标签，然而许多 web开发者并不全都�
 
 ## 两种解析 Javascript 的标签的方式
 1. 内嵌 Javascript : 代码会从上到下依此解释，在解释器对 `<script>` 元素内部的所有代码求值完毕之前，页面中的其余内容都不会被浏览器加载或显示。以下代码，页面上不会显示test.
-
-    ```
+```
     <!DOCTYPE html>
     <html>
     <head>
@@ -29,7 +29,8 @@ Js最常用的就是 Javascript 标签，然而许多 web开发者并不全都�
     <body>
         test
     </body>
-    </html>```
+    </html>
+```
 
 2. 外部 Javascript :如果通过 `<script>` 元素来包含外部脚本文件，那么 src 属性是必须的。与解析内嵌的 Javascript 代码一样，在解析外部 Javascript 文件（包括下载该文件）时，页面也会暂时停止。也就是说把上面代码中的 while 死循环放到外部文件，并通过 `<script>` 元素引入时，html 也不会显示。而且，如果下载 Javascript 文件出现问题，也会阻断页面显示。
 3. 如果是引入外部 Javascript ，即带有 src 属性的 `<script>` 标签，则在起始标签中间不应该在包含额外的 JS 代码，否则，嵌入的代码不会执行而是会被直接忽略。

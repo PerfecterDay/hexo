@@ -21,7 +21,8 @@ Java 中的 Lambda 表达式通常使用 `(argument) -> (body)` 语法书写，�
 (int a, int b) -> {  return a + b; } ;
 () -> System.out.println("Hello World"); 
 (String s) -> { System.out.println(s); } ;
-() -> 42 () -> { return 3.1415 }; 
+() -> 42 
+() -> { return 3.1415 }; 
 ```
 ### Lambda 表达式的结构
 让我们了解一下 Lambda 表达式的结构。
@@ -35,7 +36,7 @@ Java 中的 Lambda 表达式通常使用 `(argument) -> (body)` 语法书写，�
 8. 如果 Lambda 表达式的主体包含一条以上语句，则表达式必须包含在花括号{}中（形成代码块）。匿名函数的返回类型与代码块的返回类型一致，若没有返回则为空
 
 ### 函数式接口
-在 Java 中，Marker（标记）类型的接口是一种没有方法或属性声明的接口，简单地说，marker 接口是空接口。相似地，函数式接口是只包含一个抽象方法声明的接口。
+在 Java 中，Marker（标记）类型的接口是一种没有方法或属性声明的接口，简单地说，marker 接口是空接口。相似地，函数式接口是只包含一个抽象方法声明的接口，可以包含多个默认方法、类方法，但只能有一个抽象方法。
 
 java.lang.Runnable 就是一种函数式接口，在 Runnable 接口中只声明了一个方法 void run()，相似地，ActionListener 接口也是一种函数式接口，我们使用匿名内部类来实例化函数式接口的对象，有了 Lambda 表达式，这一方式可以得到简化。
 
