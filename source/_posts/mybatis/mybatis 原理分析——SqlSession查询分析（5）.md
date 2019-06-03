@@ -126,4 +126,4 @@ SqlSession 下的四大对象：
 
 SqlSession 的查询方法实际上是靠 Executor 来实现的， Executor 在查询过程中使用了 StatementHandler 获取 JDBC 中的 Statement 对象，并为其置参数。 接着使用 Statement 对象执行查询。 在这期间，使用了 ParameterHandler 、 TypeHandler 来设置参数，使用 ResultSetHandler 来处理结果集， ResultSetHandler 内部使用了 ResultHandler 来处理结果集。
 
-[sqlSession运行图](/pics/sqlSession运行图.png)
+![sqlSession运行图](/pics/sqlSession运行图.png)

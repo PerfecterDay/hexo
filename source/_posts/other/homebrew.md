@@ -1,8 +1,8 @@
 ---
 title: Mac Homebrew 的使用
 date: 2018-06-07  19:42:30
-tags: spring            
-category: spring
+tags: linux            
+category: linux
 ---
 ## 常用命令
 1. brew install [formula]:安装 formula

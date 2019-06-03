@@ -4,7 +4,7 @@ date: 2019-06-01  20:30:34
 tags: java
 category: java
 ---
-Java 集合大致可分为 Set 、List 、 Queue 和 Map 四中体系，其中
+Java 集合大致可分为 Set 、List 、 Queue 和 Map 四种体系，其中
 + Set 代表 **无序的、不可重复的集合**；
 + List 代表有序、可重复的集合
 + Map 代表具有映射关系的集合
@@ -29,7 +29,8 @@ Java 集合主要由两个接口派生而出： `Collection` 和 `Map` ，它们
 + boolean removeAll(Collection c)：从集合中删除c集合中也有的元素，如果有一个或多个元素被删除，返回 true
 + void retainAll(Collection c)：从集合中删除集合c中不包含的元素
 + int size()：返回当前集合中元素的数量
-+ Object[] toArray()：把集合转换成一个数组，所有元素称为数组的元素。
++ Object[] toArray()：把集合转换成一个数组，所有元素成为数组的元素。
++  <T> T[] toArray(T[] a)：把集合转换成一个**指定类型**数组，所有元素成为数组的元素。
 
 ### 遍历操作 Collection 的三种方法
 #### 使用 Iterable 接口
@@ -43,7 +44,7 @@ Java 集合主要由两个接口派生而出： `Collection` 和 `Map` ，它们
 + void forEachRemaining(Consumer<? super E> action)：Java 8 新增方法，可以使用 Lambda 表达式来遍历集合
 
 当使用 `Iterator` 遍历集合元素时，需要注意：
-`Collection` 集合里的元素不能被改变，只有通过 `Iterator` 的 `remove()` 方法删除即合元素才可以；否则将会引发 `ConcurrentModificationException` 异常。
+`Collection` 集合里的元素不能被改变，只有通过 `Iterator` 的 `remove()` 方法删除集合元素才可以；否则将会引发 `ConcurrentModificationException` 异常。
 
 #### 使用 foreach 循环遍历集合元素
 ```
@@ -219,3 +220,11 @@ LinkedList 既实现了 List 接口，同时也实现了 Deque 接口。因此�
 1. 如果需要遍历 List 集合元素：对于数组类（ArrayList、ArrayDeque、Vector等）List应该使用随机访问形式(get(index))来遍历；对于链表类（LinkedList)，则应该采用迭代器（Iterator)来遍历集合元素
 2. 如果需要经常执行插入、删除操作来改变包含大量数据的List集合，应该优先考虑链表类的LinkedList。使用ArrayList可能需要经常重新分配内存数组
 3. 如果有多个线程需要同时访问List集合，应该使用 Collections 工具类将集合包装成线程安全的类。
+
+## HashMap 和 Hashtable 的区别
+1. Hashtable 是一个线程安全的 Map 实现，但 HashMap不是线程安全的，所以 HashMap 性能会更好点
+2. Hashtable 不允许使用 null 作为 key 和 value。如果试图把 null 放入 Hashtable 将会引发 NPE，但 HashMap 可以使用 null 作为 key 或 value
+
+与 HashSet 类似， HashMap 、 Hashtable 判断两个 key 相等的标准也是： 两个 key 通过 equals() 方法返回 true ，且 hashCode() 返回值也相同。
+
+另外， HashMap 、 Hashtable 中还有一个 containsValue() 方法，用于判断是否包含指定 value。此时，判断是否与 value 相等的标准更简单：只需要 equals 方法返回 true 即可。

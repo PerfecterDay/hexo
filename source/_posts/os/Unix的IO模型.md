@@ -30,7 +30,7 @@ Unix下可用的5种I/O模型：
 
 ## I/O复用模型
 有了I/O复用，我们就可以调用select或poll，阻塞在这两个系统调用中的某一个上，而不是阻塞在真正的I/O系统调用之上。
-![I/O复用模型](/pics/io-multiplexing.png)
+![I/O复用模型](/pics/io-multiuse.png)
 
 我们阻塞于select调用，等待数据报套接字变为可读。当select返回套接字可读时，我们调用recvfrom把所读数据复制到应用程序缓冲区中。所以这里其实有两次系统调用，并且每次都是阻塞的。
 
