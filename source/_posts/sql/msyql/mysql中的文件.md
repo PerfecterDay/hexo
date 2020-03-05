@@ -39,7 +39,7 @@ set | [global | session ] system_var_name=expr
     二进制日志记录了所有的对数据库更改的操作日志，不包括 Select/Show这类的操作，因为这类操作不会改变数据库中的数据。但是有些 DML（insert、delete、update） 语句即使没有真正的改变数据，可能也会被记录到日志中。二进制日志有以下几种作用：
     1. 恢复:可以通过二进制日志进行 point-in-time 的恢复
     2. 复制：通过复制二进制日志到另一台数据库恢复即可实现复制
-    3. 审计：听过二进制日志的信息进行审计来判断是否有注入攻击
+    3. 审计：通过二进制日志的信息进行审计来判断是否有注入攻击
      
     参数 `log_bin` 、 `log_bin_basename` 和 `log_bin_index` 分别用来设置是否打开二进制日志、二进制日志的基础文件名和二进制日志索引文件名，以下参数影响二进制日志的行为：
     + `max_binlog_size`:单个日志文件的最大大小
@@ -52,10 +52,30 @@ set | [global | session ] system_var_name=expr
    
     二进制日志文件不能用 cat、less等命令查看，必须使用 `mysqlbinlog` 工具来查看，statement 格式的日志直接能看到逻辑SQL语句，而 row 格式的日志需要加上 `-v` 或 `-vv` 参数。遇到`mysqlbinlog: [ERROR] unknown variable 'default-character-set=utf8'`错误时，使用 `mysqlbinlog --no-defaults -v binlog.000109` 即可。
 
-#### 套接字文件
+### 套接字文件
 在 UNIX 系统下本地连接 mysql 可以使用 UNIX 域套接字方式，这种方式需要一个套接字文件，使用 `show variables like '%socket%'` 可以查看配置。
 
-#### PID文件
+### PID文件
 mysql 启动时会将进程ID写入一个文件，改文件就是 pid 文件。使用 `show variables like 'pid_file'` 查看配置。
 
-#### innodb存储引擎文件
+### 表结构定义文件
+mysql是插件式的存储引擎结构，但无论一张表采取那种存储引擎,Mysql都有一个以frm结尾的后缀名文件，这个文件记录了表结构定义。视图也会有一个frm文件定义视图结构。
+
+### innodb存储引擎文件
+主要介绍表空间文件和重做日志文件。
+
+#### 表空间文件
+innodb 采用将存储数据按表空间进行存放的设计，默认配置下会有一个初始大小10M的名为 ibdata1 的文件，该文件就是默认的表空间文件。用户可以通过参数 `innodb_data_file_path` 对默认表空间文件进行设置。设置表空间文件后，所有基于innodb 存储引擎的表的数据都会保存到该共享表空间中。
+
+若设置了 `innodb_file_per_table = on`, mysql 会为每张基于 innodb 引擎的表产生独立的表空间文件，命名规则为：表名.ibd。这些单独的表空间文件仅存储该表的数据、索引和插入缓冲BITMAP等信息，其余信息还是存在共享表空间中。
+ 
+ #### 重做日志文件
+ innodb 存储引擎的数据目录下会有两个名为 ib_logfile0、ib_logfile1 的文件，它们是重做日志文件。当实例或者介质失败时（如断电时），重做日志文件就能派上用场，innodb 存储引擎会使用重做日志文件恢复到失败之前的状态，以此来保证数据的完整性和一致性。下面参数会影响重做日志的属性：
+ 1. innodb_log_file_size ： 指定每个重做日志文件的大小
+ 2. innodb_log_files_in_group： 指定日志文件组中重做日志文件的数量，默认为2
+ 3. innodb_log_group_home_dir： 指定日志文件组所在的目录
+
+重做日志文件与二进制日志文件的区别？ 
+1. 二进制日志会记录所有与mysql数据库有关的日志记录，包括 innodb/myisam/heap 等其他存储引擎的日志，而innodb存储引擎的重做日志文件只记录innodb存储引擎本身的事务日志。
+2. 二进制日志记录的是一个事务的具体操作内容，是对应的SQL语句，是逻辑日志。而重做日志文件记录的是关于每个页更改的物理情况。
+3. 写入时间不同。二进制日志文件仅在事务提交前进行提交，即只写磁盘一次，无论该事务多大。而在事务进行的过程中，却不断有重做日志条目被写入到重做日志文件中。
