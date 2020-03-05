@@ -25,8 +25,7 @@ category: sql
 然后就可以去general_log_file的路径查看操作记录了
 
 ## 采用数据库内部查看
-出了可以用日志文件的形式查看数据库操作记录之外，也可以把日志作为一个表单，在数据库内部查看
-
+除了可以用日志文件的形式查看数据库操作记录之外，也可以把日志存储在一个表，在数据库内部查看
 
     show variables like '%log_output%';
 可以看到输出，
@@ -43,7 +42,5 @@ category: sql
 
     select * from mysql.general_log; <=====查看操作记录
     truncate table mysql.general_log; <=====清空操作记录表单
-
-## profile
 
 

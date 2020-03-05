@@ -7,7 +7,6 @@ category: sql
 # windwos 下 mysql 的安装及配置
 
 ## mysql 安装
-
 1. 下载zip包，解压到某个目录
 2. 解压目录下创建my.ini文件，配置basedir和datadir路径
 3. 执行mysqld --initialize--console,初始化数据库，会在控制台打印出root账户的随机密码
@@ -15,8 +14,7 @@ category: sql
 5. 停止mysqld服务：mysqladmin -u root shutdown，如果要密码加上-p
 6. 执行mysql -hlocalhost -uroot -p连接数据库
 7. 首次连接数据库后要更改初始化密码：ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';否则不能执行sql语句
-
-
+8. 允许 root 从任意IP登录：`update mysql.user set host='%' where user='root';`,然后 `flush privileges`
 
 ## mysql 安装为服务
 1. mysqld --install-manual安装为手动启动的服务，mysqld --install 安装位自动启动的服务

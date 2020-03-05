@@ -9,7 +9,7 @@ category: git
 0. git clean: 删除工作区中未跟踪（不在版本库也未索引的）的文件
 1. git add:将文件添加到暂存区
 2. git ls-files --satge:查看暂存区的文件
-3. git rm filename:从暂存区和工作区删除某个文件，提交后，版本库中会删除这个文件
+3. git rm --cached filename:从暂存区和工作区删除某个文件，提交后，版本库中会删除这个文件
 4. git checkout head filename:从暂存区恢复工作区中的文件，通常是想放弃对工作区中的修改或者误删了工作区文件
 5. git reset filename:从版本库中恢复某个文件，当你删除了工作区中的文件，又删除了暂存区中的文件，想恢复文件可以用这个命令
 6. git commit:将暂存区中的文件提交到版本库
