@@ -7,8 +7,8 @@ category: sql
 ### 备份概述
 根据备份方法不同，可以分为三类：
 1. 热备，数据库不停止，备份不会对数据库产生影响
-2. 冷备，数据库停止，赋值相关文件
-3. 温备，数据库不停止，但是备份会影响数据库操作，如加一个全局锁保证备份数据的一致性
+2. 冷备，数据库停止，复制相关文件即可
+3. 温备，数据库不停止，但是备份会影响数据库操作，如加一个全局读锁以保证备份数据的一致性
 
 根据备份后文件的内容可以分为：
 1. 裸文件备份
@@ -21,7 +21,7 @@ category: sql
 数据可备份的一致性：在备份的时间点上，数据库中的数据是一致的。假设，正在备份时，网络游戏中某个玩家在购买道具，先扣除相应金钱，然后发放装备。必须确保备份后的数据是一致的。不能扣钱不发装备或者发了装备不扣钱。可以开启一个事务，然后备份相关表，最后提交。扣钱-发装备操作必须在一个事务中完成。
 
 ### 冷备
-对于 Innodb 引擎很简单，只需要备份 Mysql 数据库的 frm 文件、共享表空间文件、独立表空间文件(*.ibd)、重做日志文件。优点是：
+对于 Innodb 引擎很简单，只需要备份 Mysql 数据库的 frm 文件（mysql8删除了这个文件，将表定义放在在ibd文件中）、共享表空间文件、独立表空间文件(*.ibd)、重做日志文件。优点是：
 1. 备份简单，只需要复制相关文件即可
 2. 恢复简单，将备份文件复制到对应目录即可
 3. 恢复的速度快，不需要执行sql语句，也不用重建索引
@@ -34,14 +34,14 @@ category: sql
 ### 逻辑备份
 
 #### mysqldump 备份
-`mysqldump [arguments] > file_name`
+`mysqldump [arguments] > file_name`，不能导出视图。
 重要参数：
 
 0. --all-databases: 备份所有数据库。
-1. --databases db_name: 备份指定数据库
+1. --databases db_name1 db_name1 db_name1: 备份指定数据库
 2. --single-transaction : 在备份开始时，先执行 `start transaction` 语句开启事务，保证数据一致性，但是不能执行DDL语句，不能隔离DDL操作。且只对 Innodb 引擎有效
-3. --lock-tables(-l): 备份时，依次锁住每个数据库中的表来保证单表的一致性，不能保证整个数据库的一致性。一般用于 MyIsam 引擎，且与 --single-transaction 互斥，不能同时使用。
-4. --lock-all-tables(-x): 备份时，锁住所有表， 避免 --lock-tables 不能锁住所有表的问题。
+3. --lock-tables(-l): 备份时，依次锁住数据库中每个架构下的所有表来保证单表的一致性，不能保证整个数据库的一致性。一般用于 MyIsam 引擎，且与 --single-transaction 互斥，不能同时使用。这个选项默认是打开的，也就是说备份时默认是锁表的，如果是热备，那么线上只能执行读语句，所有写事务都会被阻塞。
+4. --lock-all-tables(-x): 备份时，锁住所有架构下的所有表， 避免 --lock-tables 不能锁住所有表的问题。
 5. --add-drop-tables:在 create database 前先运行 drop database。此参数要和 --al-databases 或者 --databases 选项一起使用。
 6. --master-data[=value]： 通过改参数产生的备份文件主要用来建立一个 replication。value为1时，文件中记录 change master 语句；为2时，change master 语句被写出 sql注释。
 7. --events(-E): 备份事件调度器
@@ -69,10 +69,11 @@ lines terminated by '\r\n'
 
 #### 二进制日志备份与恢复
 首先需要开启二进制日志功能：
-log-bin=mysql-bin
-sync_binlog=1
-innodb_support_xa=1
+    log-bin=mysql-bin
+    sync_binlog=1
+    innodb_support_xa=1
 备份二进制文件前，使用 `flush logs` 命令生成一个新的二进制日志文件，然后备份之前的二进制文件。
 
 恢复二进制日志：
-`mysqlbinlog [options] bin_log_file`
+`mysqlbinlog [options] bin_log_file | mysql -u root -p`
+--start-position 和 --stop-position 可以用来指定从二进制日志的某个偏移量进行恢复。
