@@ -9,7 +9,8 @@ category: docker
 1. 镜像：镜像是构建 Docker 世界的基石，Docker基于镜像来运行容器。
 2. 容器：容器是基于镜像的，能够为一系列操作提供一个隔离的执行环境。
 3. Registry：相当于 GitHub，用来存储、发布镜像的仓库。
-
+4. 如何确定自己是否是登录到一台物理机/虚拟机/容器shell中： systemd-detect-virt -c
+   
 #### 镜像操作
 0. `docker build -t [<仓库名>[:<标签>] 镜像构建上下文路径` : 利用 Dockerfile 来制作镜像
 1. `docker search xxx`: 查找镜像

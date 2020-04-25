@@ -46,24 +46,27 @@ A和B的自然连接：来自A表的元组和来自B表的元组在共同属性�
 完整性约束保证授权用户对数据库所做的修改不会破坏数据的一致性，防止的是对数据库的以外破坏。
 
 ### 单个关系上的约束
-1. not null
+0. primary key  
+   主键约束
+
+1. not null  
 指定了 not null 的列，不允许插入 null 值。任何尝试插入 null 的操作都会失败
 
-2. unique
+2. unique  
 `unique(A1 ,A2, A3 ....)`
 unique声明指出属性 A1 ,A2, A3 ....形成一个候选码；即在关系中没有两个元组能在所有列出的属性上取值相同。但是属性值可以为null。
 
-3. check子句
+3. check子句  
 当应用于关系声明时（创建表时），check(P)子句指定一个谓词P，关系中的每个元组都必须满足谓词P。
-```
-create table T(
-    id varchar(10),
-    season varchar(8),
-    ....,
-    primary key(id),
-    check(season in('Spring','Summer','Autumn','Winter'))
-)
-```
+    ```
+    create table T(
+        id varchar(10),
+        season varchar(8),
+        ....,
+        primary key(id),
+        check(season in('Spring','Summer','Autumn','Winter'))
+    )
+    ```
 ### 参照完整性（多个关系）
 参照完整性用来保证一个关系中给定属性集上的取值也在另一个关系的特定属性集的取值中出现。
 
