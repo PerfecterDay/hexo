@@ -1,5 +1,5 @@
 ---
-title: Linux文件权限
+title: Linux权限
 date: 2019-06-11  22:01:23
 tags: linux            
 category: linux
@@ -93,14 +93,14 @@ CREATE_MAIL_SPOOL=yes  系统为该用户账户在mail目录下创建一个用�
 ## Linux 组
 
 ### /etc/group 文件
-与用户账户类似，组信息也保存在系统的一个文件中。/etc/group文件包含系统上用到的每个
-组的信息。系统账户用的组通常会分配低于500的GID值，而用户组的GID则会从500开始分配。/etc/group文件有4个字段：
+与用户账户类似，组信息也保存在系统的一个文件中。/etc/group文件包含系统上用到的每个组的信息。系统账户用的组通常会分配低于500的GID值，而用户组的GID则会从500开始分配。/etc/group文件有4个字段：
 + 组名
 + 组密码
 + GID
 + 属于该组的用户列表
+查看用户所属组信息：`groups`|`grooups [username]`.
 
-### 创建新租
+### 创建新组
 `groupadd`  命令可在系统上创建新组。
 ```
 groupadd shared

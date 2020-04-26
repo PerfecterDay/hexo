@@ -40,11 +40,6 @@ category: linux
 + echo         显示某个环境变量值 echo $PATH
 + export   设置一个新的环境变量 export HELLO="hello" (可以无引号)
 + env      显示所有环境变量
-+ set      显示本地定义的shell变量
++ set      显示本地定义的shell变量  
 + unset        清除环境变量 unset HELLO
 + readonly     设置只读环境变量 readonly HELLO
-
-
-
-
-

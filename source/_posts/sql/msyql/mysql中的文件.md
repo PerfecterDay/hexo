@@ -73,7 +73,32 @@ innodb 采用将存储数据按表空间进行存放的设计，默认配置下�
 若设置了 `innodb_file_per_table = on`, mysql 会为每张基于 innodb 引擎的表产生独立的表空间文件，命名规则为：表名.ibd。这些单独的表空间文件仅存储该表的数据、索引和插入缓冲BITMAP等信息，其余信息如回滚信息（UNDO）、插入缓冲索引页、系统事务信息、双写缓冲等还是存在共享表空间中。
 
 ##### 分区表
-删除分区：  `ALTER TABLE REGSAPICallAudit DROP PARTITION` \`p2019-06-01\`;
++ 查看分区：
+    1. `show create table REGSAPICallAudit`
+    2. 查看表是否采用了分区:`show table status like 'regsapicallaudit'\G`
+    3. 查看 `information_schema.partitions` 表可以查看详细分区信息：
+   ```
+    select
+    partition_name part,  
+    partition_expression expr,  
+    partition_description descr,  
+    table_rows  
+    from information_schema.partitions  where 
+    table_schema = schema()  
+    and table_name='tr';
+    ```
++ 添加分区：  `ALTER TABLE REGSAPICallAudit ADD PARTITION (PARTITION` \`p\${date}\` `VALUES LESS THAN (TO_DAYS('${date}')));`
++ 删除分区：  `ALTER TABLE REGSAPICallAudit DROP PARTITION` \`p2019-06-01\`,\`p2019-06-02\`,\`p2019-06-03\`;
++ 重新划分分区：
+```
+ALTER TABLE regsapicallaudit
+REORGANIZE PARTITION `p2020-04-28` INTO (
+PARTITION `p2020-04-26` VALUES LESS THAN (737906),
+PARTITION `p2020-04-27` VALUES LESS THAN (737907),
+PARTITION `p2020-04-28` VALUES LESS THAN (737908)
+);
+```
+注意重新划分分区时， PARTITION 定义的顺序一定是要递增的。
 
  #### 重做日志文件
  innodb 存储引擎的数据目录下会有两个名为 ib_logfile0、ib_logfile1 的文件，它们是重做日志文件。当实例或者介质失败时（如断电时），重做日志文件就能派上用场，innodb 存储引擎会使用重做日志文件恢复到失败之前的状态，以此来保证数据的完整性和一致性。下面参数会影响重做日志的属性：
