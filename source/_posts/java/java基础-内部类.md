@@ -35,15 +35,15 @@ category: java
 #### 使用内部类
 1. 在外部类内部使用
 
-在外部类内部使用内部类时，和使用普通类没什么区别，唯一的区别在于：
-不能在外部类的静态成员中(静态成员方法、静态初始化块)使用非静态内部类。
-1. 在外部类以外使用非静态内部类
+    在外部类内部使用内部类时，和使用普通类没什么区别，唯一的区别在于：
+    不能在外部类的静态成员中(静态成员方法、静态初始化块)使用非静态内部类。
+2. 在外部类以外使用非静态内部类
 
-声明一个内部类变量：`OuterClass.InnerClass varName`
-实例化一个非静态内部类对象，必须现有外部类对象实例： `OuterInstance.new InnerClassConstructor()`
+    声明一个内部类变量：`OuterClass.InnerClass varName`
+    实例化一个非静态内部类对象，必须现有外部类对象实例： `OuterInstance.new InnerClassConstructor()`
 
-2. 在外部类以外使用静态内部类
-`new OuterClass.InnerConstructor()`
+3. 在外部类以外使用静态内部类
+    `new OuterClass.InnerConstructor()`
 
 #### 局部内部类
 在方法内部定义的类，就是一个局部内部类。

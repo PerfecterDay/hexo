@@ -1,5 +1,5 @@
 ---
-title: java基础-访问权限
+title: java基础-包和访问权限
 date: 2019-08-15  21:20:23
 tags: java
 category: java

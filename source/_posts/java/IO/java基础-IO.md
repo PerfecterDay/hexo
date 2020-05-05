@@ -13,6 +13,7 @@ category: java
 + `String[] list(FileNameFilter filter)`: 返回 `FileNameFilter` 过滤后的字符串数组
 + `File[] listFiles()`: 返回所有的文件数组
 + `File[] listFiles(FilenameFilter filter)`: 返回 `FilenameFilter` 过滤后的文件数组
+
 假如 `File` 指代的是一个目录，那么就可以使用 `list()` 方法获取目录下的文件列表，如果想获取所有文件列表，使用不带参数的 `list()` 的方法即可；如果想获得一个受限列表，那么就要使用“目录过滤器”了。 `FilenameFilter` 接口的 `boolean accept(File dir,String name)` 返回 `true` 的才会返回到数组中。 `listFiles` 同理。
 
 ```
@@ -43,7 +44,8 @@ public class FileList {
             System.out.print(file+", ");
         }
     }
-}```
+}
+```
 
 ### 目录/文件的检查及创建
 可以获取文件/目录相关的信息：

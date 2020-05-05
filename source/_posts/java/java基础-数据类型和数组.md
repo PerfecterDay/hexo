@@ -1,5 +1,5 @@
 ---
-title: java基础-入门
+title: java基础-数据类型和数组
 date: 2019-03-06  21:11:40
 tags: java
 category: java
@@ -84,6 +84,48 @@ calss test
  3. `s=s+1`为什么会报错？这里我没有看JLS，因为`s=s+1`，左边有变量参与，编译器在无法分析出该变量的值是什么，因为s为变量，其值不确定无法确定s+1是否超出short范围，为了防止进行类型转换时丢失精度，所以编译器直接当成无法确定来处理，报错了事。so，当有变量为byte，short，char时，编译器就是这么干的。需要知道的是在编译期间，编译器只做语法检查，而不会进行计算动作，也就是说编译器不会对`s+1`是否查出s的范围而进行一次计算判断。
  4. `s++`呢？如有必要将`s+1`的和进行窄化转换，即将`s+1`做强制转换`（short）（s+1）`然后赋给s。（JLS中文三版15.15.1）
  5. 最后s+=1，JLS中文三版15.26.2说对于组合运算符形如`E1 op=E2`的组合赋值表达式等价于`E1=（E!）（（E1）op（E2））`，例如`s+=1`等价于`s=(short)(s+1)`。
+
+## 数组
+Java数组要求所有数组元素具有相同的类型。Java 数组是一种引用类型。一旦数组的初始化完成，数组在内存中所占的内存空间就被固定下来了，数组的长度将不会改变。Java数组的长度存储在length属性中。
+
+### 数组的初始化
++ 静态初始化：初始化时由程序员显示指定每个元素的初始值，由系统决定长度。
++ 动态初始化：初始化时程序员只指定数组长度，由系统为数组元素分配初始值。
+
+静态初始化： ``arr = {element1,element2,element3....}``; 此外，静态初始化还可以直接在定义时完成： ``type[] arr={element1,element2,element3....}``
+动态初始化： ``arr = new int[10]`` 或者 ``type[] arr= new type[length]`` ; 系统根据 type 类型，自动初始化数组。
+
+### foreach访问数组
+Java 5之后提供的语法糖，使得访问数组更加方便，不需要使用数组下标索引即可访问数组。
+
+    for(type var: array | collection){
+        var //自动访问每个元素
+    }
+如果想要改变数组中每个元素的值，使用var并不能保证，此处的var是一个局部变量。还是要用 ``arr[index]=value`` 的方式为数组元素赋值。
+
+### Arrays数组工具类
++ `int binarySearch(type[] arr, type key)` : 使用二分查找在数组arr中查找值为key的元素的索引。如果不存在值为key的元素，返回负数。要求arr数组已经按升序排列。
++ `int binarySearch(type[] arr, int from, int end, type key)` : 这个方法与前一个方法类似，但是它只搜索数组中 [from, end] 索引的元素。
++ `tyep[] copyOf(type[] arr, int len)` : 这个方法会把 arr 数组复制成一个长度为 len 的新数组。如果 len 比 arr 的长度小，则只复制 arr 前 len 个元素，如果比 arr 长度大，则后边的元素初始化为0（整型）、0.0（浮点型）、false（布尔型）、null（引用型）。
++ `tyep[] copyOfRange(type[] arr, int from, int to)` :这个方法与前一个方法类似，但这个方法只复制 arr 数组的 [from,to] 部分。
++ `boolean equals(tyape[] a, type[] b)` : 如果 a, b长度相等且每个数组的元素一一相同（==），返回 true。
++ `void fill(tyape[] a, type value)` : 将 a 的所有元素赋值为 value。
++ `void fill(tyape[] a,int from,int end, type value)` : 将a中索引处于[from,end]的元素全部赋值为 value。
++ `void sort(type[] a)` : 将数组 a 排序。
++ `void sort(type[] a,int from,int end)` : 将数组 a 中[from,end]处的元素排序。
++ `String toString(type[] a)` : 将数组转换成字符串，用逗号连接各个元素。
+
+Java 8 中新增的方法：
++ `void parallelPrefix(type[] a, typeBinaryOperator op)` : 利用 op 参数中的计算方法重新计算数组中每个元素的值，op 计算方法包含 left和right两个参数，right指向当前计算元素的索引，left指向right的前一个，第一个元素时，left值为1 。
++ `void parallelPrefix(type[] a,int from, int to, typeBinaryOperator op)` : 与上个方法类似，但仅计算[from，to]索引处的值。
++ `void setAll(type[] a, IntToTypeFunction generator)` : 使用指定生成器 generator 为所有元素赋值，generator控制元素值的生成算法。
++ `void parallelSetAll(type[] a, IntToTypeFunction generator)` : 同上，但是增加了并行能力。
++ `void parallelSort(type[] a)` : 与 sort 方法类似，只是增加了并行能力。
++ `void parallelSort(type[] a, int from,int end)` : 与上面方法类似，只排序[from,end]处的元素排序。
++ `Spliterator<T> spliterator(T[] array)` : 将数组转换成 Spliterator 对象。
++ `Spliterator<T> spliterator(T[] array, int startInclusive, int endExclusive)` : 同上，值转换[startInclusive,endExclusive]的元素。
++ `Stream<T> stream(T[] array)` : 将数组转换成 Stream 。
++ `Stream<T> stream(T[] array，int startInclusive, int endExclusive)` : 同上。
 
 ## 语句
 
