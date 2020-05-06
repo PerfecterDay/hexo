@@ -2,7 +2,8 @@
 title: java基础-常用jvm命令
 date: 2019-08-27 21:23:38
 tags: jvm
-category: java
+category: 
+- [java,jvm]
 ---
 
 ### jps

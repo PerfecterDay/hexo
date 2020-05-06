@@ -2,7 +2,8 @@
 title: java基础-并发之线程
 date: 2018-06-11 21:14:30
 tags: java
-category: java
+category:
+- [java,多线程]
 ---
 
 ## 线程的状态

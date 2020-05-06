@@ -2,7 +2,8 @@
 title: java基础-JVM数据区域及参数
 date: 2019-03-04  22:08:24
 tags: jvm
-category: java
+category: 
+- [java,jvm]
 ---
 
 ![JVM运行时数据区](/pics/jvm运行时数据区.png)

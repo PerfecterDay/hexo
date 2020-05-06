@@ -2,7 +2,8 @@
 title: JavaEE基础之Web程序基本结构
 date: 2019-04-26  22:07:35
 tags: web
-category: JavaEE
+category: 
+- [java,JavaEE]
 ---
 ## 目录结构和War文件
 所有的 Java EE 服务器都支持War应用程序归档，大部分服务器还支持未归档的应用程序目录。如下图所示：

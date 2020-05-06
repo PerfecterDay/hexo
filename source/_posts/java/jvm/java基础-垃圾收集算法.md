@@ -2,7 +2,8 @@
 title: java基础-垃圾收集
 date: 2019-05-02 09:28:17
 tags: java
-category: java
+category: 
+- [java,jvm]
 ---
 ## 垃圾收集算法
 ### 标记-清除算法

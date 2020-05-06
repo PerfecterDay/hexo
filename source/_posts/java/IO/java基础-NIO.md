@@ -2,7 +2,8 @@
 title: java基础-NIO
 date: 2018-11-03  08:43:24
 tags: NIO
-category: java
+category: 
+- [java,IO]
 ---
 主要转自：https://www.ibm.com/developerworks/cn/education/java/j-nio/j-nio.html
 

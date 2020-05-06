@@ -2,7 +2,8 @@
 title: java基础-并发之线程池
 date: 2018-05-06 11:02:00
 tags: java
-category: java
+category: 
+- [java,多线程]
 ---
 
 
@@ -21,8 +22,15 @@ category: java
 ![继承类图](/pics/threadpool1.jpg)
 
 AbstractExecutorService是ExecutorService的继承类。
+## 内置线程池
+JDK1.5 提供了一个 Executors 工厂来生产线程池，该工厂里包含如下几个静态工厂方法来创建线程池：
+1. `newCachedThreadPool()`: 创建一个具有缓存功能的线程池，系统根据需要创建线程，这些线程将会被缓存到线程池中
+2. `newFixedThreadPool(int nThreads)`: 创建一个可重用的、具有固定线程数的线程池
+3. `newSingleThreadExecutor()`: 创建一个只有单线程的线程池
+4. `newScheduledThreadPool(int corePoolSize )`: 创建一个具有固定线程数的线程池，它可以在指定延迟后执行线程任务。corePoolSize指池中保存的线程数，即使线程是空闲的也保存下来
+5. `newSingleThreadScheduledExecutor()`: 创建一个只有单线程的线程池，它可以在指定延迟后执行线程任务。
 
-## 线程池的创建
+## 自创建线程池
 
 我们可以通过ThreadPoolExecutor来创建一个线程池。
 
@@ -78,7 +86,7 @@ AbstractExecutorService是ExecutorService的继承类。
     4. DiscardPolicy：不处理，丢弃掉。
 当然也可以根据应用场景需要来实现RejectedExecutionHandler接口自定义策略。如记录日志或持久化不能处理的任务。
 
-## 向线程池提交任务
+### 向线程池提交任务
 我们可以使用`execute`提交的任务，但是`execute`方法没有返回值，所以无法判断任务知否被线程池执行成功。通过以下代码可知`execute`方法输入的任务是一个Runnable类的实例。
     
     void execute(Runnable command);
@@ -86,7 +94,7 @@ AbstractExecutorService是ExecutorService的继承类。
 
     <T> Future<T> submit(Callable<T> task);
 
-## 线程池的关闭
+### 线程池的关闭
 我们可以通过调用线程池的`shutdown`或`shutdownNow`方法来关闭线程池，但是它们的实现原理不同：
 
 1. shutdown的原理是只是将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程。
@@ -170,9 +178,3 @@ AbstractExecutorService是ExecutorService的继承类。
 通过扩展线程池进行监控。通过继承线程池并重写线程池的 `beforeExecute` ， `afterExecute` 和 `terminated` 方法，我们可以在任务执行前，执行后和线程池关闭前干一些事情。如监控任务的平均执行时间，最大执行时间和最小执行时间等。这几个方法在线程池里是空方法。如：
 
     protected void beforeExecute(Thread t, Runnable r) { }
-
-
-
-
-
-

@@ -2,7 +2,8 @@
 title: java基础-类和对象的初始化
 date: 2018-09-01  20:46:20
 tags: 初始化
-category: java
+category: 
+- [java,jvm]
 ---
 主要转自：https://www.ibm.com/developerworks/cn/java/j-lo-clobj-init/index.html
 

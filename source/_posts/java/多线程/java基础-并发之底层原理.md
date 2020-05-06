@@ -2,7 +2,8 @@
 title: java基础-并发之底层原理
 date: 2019-04-15 20:17:27
 tags: java
-category: java
+category: 
+- [java,多线程]
 ---
 
 ## 处理器如何实现原子操作

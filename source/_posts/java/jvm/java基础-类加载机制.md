@@ -2,7 +2,8 @@
 title: java基础-类加载机制
 date: 2019-02-28  21:17:24
 tags: classLoader
-category: java
+category: 
+- [java,jvm]
 ---
 原文：https://blog.csdn.net/briblue/article/details/54973413 
 
