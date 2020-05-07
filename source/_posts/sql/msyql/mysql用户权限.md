@@ -2,9 +2,8 @@
 title: mysql 用户及权限管理
 date: 2019-09-21 09:20:28
 tags: mysql
-category: sql
-
-
+category: 
+- [sql,mysql]
 ---
 ### 用户管理
 mysql 用户信息存储在 mysql.user 表中。

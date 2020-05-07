@@ -22,6 +22,7 @@ category:
 ![继承类图](/pics/threadpool1.jpg)
 
 AbstractExecutorService是ExecutorService的继承类。
+
 ## 内置线程池
 JDK1.5 提供了一个 Executors 工厂来生产线程池，该工厂里包含如下几个静态工厂方法来创建线程池：
 1. `newCachedThreadPool()`: 创建一个具有缓存功能的线程池，系统根据需要创建线程，这些线程将会被缓存到线程池中
@@ -93,6 +94,8 @@ JDK1.5 提供了一个 Executors 工厂来生产线程池，该工厂里包含�
 我们也可以使用submit 方法来提交任务，它会返回一个`future`,那么我们可以通过这个`future`来判断任务是否执行成功，通过`future`的`get`方法来获取返回值，`get`方法会阻塞住直到任务完成，而使用`get(long timeout, TimeUnit unit)`方法则会阻塞一段时间后立即返回，这时有可能任务没有执行完。
 
     <T> Future<T> submit(Callable<T> task);
+    <T> Future<T> submit(Runnable task, T result);//任务执行完后，返回 result 结果
+<img src="/pics/how-to-use-executor.jpg" width=60% hright=60%>
 
 ### 线程池的关闭
 我们可以通过调用线程池的`shutdown`或`shutdownNow`方法来关闭线程池，但是它们的实现原理不同：

@@ -2,7 +2,8 @@
 title: mysql的安装及配置
 date: 2018-05-11 11:02:00
 tags: mysql
-category: sql
+category: 
+- [sql,mysql]
 ---
 # windwos 下 mysql 的安装及配置
 

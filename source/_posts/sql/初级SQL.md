@@ -2,7 +2,8 @@
 title: 初级 SQL
 date: 2018-06-14 20:34:45
 tags: sql   
-category: sql
+category: 
+- [sql,sql语句]
 ---
 
 ## 数据库表的新建修改与删除

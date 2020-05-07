@@ -2,7 +2,8 @@
 title: mysql 中的文件
 date: 2019-10-10 22:26:33
 tags: mysql
-category: sql
+category: 
+- [sql,mysql]
 ---
 
 #### 文件种类

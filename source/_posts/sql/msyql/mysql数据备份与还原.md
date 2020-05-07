@@ -2,7 +2,8 @@
 title: mysql数据备份与还原
 date: 2019-08-11 09:15:26
 tags: mysql
-category: sql
+category: 
+- [sql,mysql]
 ---
 ### 备份概述
 根据备份方法不同，可以分为三类：

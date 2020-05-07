@@ -100,12 +100,12 @@ ByteBuffer 类中有五个 put() 方法：
 
 ## NIO 网络编程的一般步骤
 
-### 打开一个 ServerSocketChannel
+### 服务器端打开一个 ServerSocketChannel
 为了接收连接，我们需要一个 `ServerSocketChannel` 。事实上，我们要监听的每一个端口都需要有一个 `ServerSocketChannel` 。对于每一个端口，我们打开一个 `ServerSocketChannel` ，如下所示：
 ```
 ServerSocketChannel ssc = ServerSocketChannel.open();
 ssc.configureBlocking( false );
- ServerSocket ss = ssc.socket();
+ServerSocket ss = ssc.socket();
 InetSocketAddress address = new InetSocketAddress( ports[i] );
 ss.bind( address );
 ```

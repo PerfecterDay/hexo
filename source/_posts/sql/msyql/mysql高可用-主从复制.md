@@ -2,7 +2,8 @@
 title: mysql高可用-主从复制
 date: 2019-08-11 16:15:00
 tags: mysql
-category: sql
+category: 
+- [sql,mysql]
 ---
 
 ### 复制原理

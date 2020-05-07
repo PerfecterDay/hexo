@@ -2,7 +2,8 @@
 title: mysql innodb 存储引擎
 date: 2019-09-18 21:11:23
 tags: mysql
-category: sql
+category: 
+- [sql,mysql]
 ---
 
 

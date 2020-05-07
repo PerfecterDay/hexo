@@ -2,7 +2,8 @@
 title: 中级 SQL
 date: 2019-06-10 21:15:35
 tags: sql   
-category: sql
+category: 
+- [sql,sql语句]
 ---
 
 ## 连接表达式

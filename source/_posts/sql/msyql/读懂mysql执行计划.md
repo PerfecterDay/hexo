@@ -2,7 +2,8 @@
 title: 读懂mysql执行计划
 date: 2018-06-19 15:22:28
 tags: mysql
-category: sql
+category: 
+- [sql,mysql]
 ---
 -----------------------------------------------
 https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain-join-types

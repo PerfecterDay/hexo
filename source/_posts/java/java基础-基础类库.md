@@ -1,5 +1,5 @@
 ---
-title: java基础-基础类库（一）
+title: java基础-基础类库
 date: 2019-03-11  21:14:34
 tags: java
 category: java
@@ -23,11 +23,11 @@ category: java
 `Runtime` 类代表 Java 程序运行时环境，每个 Java 程序都有一个与之关联的 `Runtime` 实例，应用程序通过该对象与其运行时环境相连。应用程序不能创建自己的 `Runtime` 实例，但可以通过类方法 `getRuntime()` 获取与之关联的 `Runtime` 对象。
 
 Runtime 类代表 Java 运行时环境，可以访问 JVM 的相关信息，如处理器数量、内存信息等。
-+ `availabeProcessors()` :处理器数量。
-+ `freeMemory()` :空闲内数。
-+ `totalMomery()` :总内存数。
-+ `maxMomery()` :可用最大内存。
-+ `exec()` :单独启动一个进程运行操作系统命令。
++ `int availabeProcessors()` :处理器数量。
++ `long freeMemory()` :空闲内数。
++ `long totalMomery()` :总内存数。
++ `long maxMomery()` :可用最大内存。
++ `Process exec(String command)` :运行指定命令单独启动一个进程，返回启动进程的引用
 
 # 常用类
 
@@ -88,3 +88,13 @@ System.out.println();
 + `String setProperty(String key, String value)`:设置属性值。
 + `void load(InputStream in)`:从属性文件中追加 key-value 属性对到 Properties 对象中。
 + `void store(OutputStream out, String comments)`:将 Properties 对象中的 key-value 对输出到指定的属性文件中，并添加 comments 。不是追加，会覆盖整个文件内容。
+
+### Math类
++ `double floor(double a)`: 向下取整
++ `double ceil(double a)`: 向上取整
++ `static double pow(double a, double b)`: 计算 a 的 b 次方
++ `int round(float a)`: 四舍五入值
++ `double random()`: （0，1）区间的随机值
++ `double abs(double a)`: 取绝对值
++ `int max(int a, int b)`: 取两者之间的最大值
++ `int min(int a, int b)`: 取两者之间的最小值

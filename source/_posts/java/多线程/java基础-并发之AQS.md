@@ -31,8 +31,10 @@ category:
 
 ### 同步队列
 同步器依赖内部的同步队列(双向FIFO队列)来完成同步状态的管理。
-![独占式同步状态获取流程](/pics/AQS-1.png)
-首先调用自定义同步器的 `tryAcquire(int arg)` 方法，该方法应该保证线程安全地获取同步状态，如果获取失败，则构造同步节点（独占式 `NODE.EXCLUSIVE` ,同一时刻只能有一个线程成功获取同步状态）并通过 `addWaiter(Node node)` 方法将该节点加入到同步队列的尾部，最后调用 `acquireQueued(final Node node, int arg)` 方法，使得该节点（线程）以“死循环”的方式获取同步状态。如果获取不到则阻塞节点中的线程，被阻塞线程的唤醒主要依靠前驱节点的出队或阻塞线程被中断来实现。
+
+独占式同步状态获取流程如下：
+<img src="/pics/AQS-Exclusive.png" height=60% width=60%>
+首先调用自定义同步器的 `tryAcquire(int arg)` 方法，该方法应该保证线程安全地获取同步状态，如果获取失败，则构造同步节点（独占式 `NODE.EXCLUSIVE` ,同一时刻只能有一个线程成功获取同步状态），并通过 `addWaiter(Node node)` 方法将该节点加入到同步队列的尾部，最后调用 `acquireQueued(final Node node, int arg)` 方法，使得该节点（线程）以“死循环”的方式获取同步状态。如果获取不到则阻塞节点中的线程，被阻塞线程的唤醒主要依靠前驱节点的出队或阻塞线程被中断来实现。
 ```
     public final void acquire(int arg) {
         if (!tryAcquire(arg) &&
@@ -71,7 +73,9 @@ category:
             }
         }
     }
-    
+```
+节点进入同步队列之后，就进入了一个自旋的过程，每个节点（或者说每个线程）都在自省地观察，当条件满足，获取到了同步状态，就可以从这个自旋过程中退出，否则依旧留在这个自旋过程中（并会阻塞节点的线程）：
+``` 
     final boolean acquireQueued(final Node node, int arg) {
         boolean failed = true;
         try {
@@ -95,6 +99,7 @@ category:
         }
     }
 ```
+
 锁的释放：
 ```
 public final boolean release(int arg) {

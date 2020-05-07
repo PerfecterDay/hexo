@@ -61,3 +61,63 @@ public class FileList {
 + `boolean createNewFile()` :创建新文件当 `File` 代表一个文件时
 + `boolean mkdir()` :创建新目录当 `File` 代表一个目录时
 
+## IO 流
+流按照不同的方式可以分为如下几类：
+输入流：从外设/网络等流入程序内存的流，只能从其中读数据，不能写
+输出流：从程序内存输出到外设/网络等的流，只能向其中写数据，不能读
+节点流：可以直接从/向一个特定的IO设备（磁盘、网络等）读写数据的流，称为节点流，也称为低级流
+处理流：对于一个已经存在的流进行连接或封装，通过封装后流来实现数据读写的功能，也称为高级流；关闭最上层的处理流，系统会自动关闭该处流包装的节点流
+<img src="/pics/stream-2.png" width=50%/>
+字节流/字符流：两种流操作的数据单元不同，字节流按字节处理数据，而字符流按16位字符处理数据
+<img src="/pics/stream-1.png" width=60%/>
+
+### 输入输出流体系
+<img src="/pics/stream-framework.png" alt="stream-framework">
+粗体标出的类代表节点流，必须直接与指定的物理节点关联；斜体标出的类代表抽象基类，无法直接创建实例。  
+访问数组和字符串的流看似没什么用，因为数组和字符串本来就可以在内存中直接访问，为啥还要使用流来读写呢？当你的API接口只接受IO流参数，但是你又想用字符串或数组去调用这个API时，就可以使用这种流来调用。
+
+#### InputStream 和 Reader
+InputStream/Reader 里包含以下三个读方法：  
++ `int read()`: 从输入流中读取一个字节，返回读取到的字节数据
++ `int read(byte[]/char[] b)`: 从输入流中读取数据到字节/字符数组b中，最多读取b.length个字节，返回实际读取的字节/字符数
++ `int read(byte[] b, int off, int len)`: 从输入流中最多读取len个字节/字符存入字节/字符数组b中，从off位置开始存放，返回实际读取的字节/字符数
+除此之外，它们还支持如下几个方法来移动记录指针：
++ `boolean markSupported()`: 判断流是否支持记录标记
++ `synchronized void mark(int readlimit)`: 在记录指针（读取位置的记录，读取时会从这个位置开始读）当前位置记录一个标记
++ `synchronized void reset()`: 将记录指针重新定位到上一个记录标记的位置
++ `long skip(long n)`: 将记录指针向前移动 n 个字节/字符
+
+#### OutputStream 和 Writer
+OutputStream/Writer 也提供如下三个写方法：
++ `void write(int b)`: 将字节/字符 b写入到流中
++ `void write(byte[]/char[] buf)`: 将字节/字符数组buf中的数据写入输出流中
++ `void write(byte[]/char[] buf, int off, int len)`: 将字节/字符数组buf中从off位置开始长度为len的数据写入输出流中
+因为字符流直接以字符为操作单位，因此 Writer 也支持直接写字符串：
++ `void write(String str)`: 将字符串 str 中的字符写入输出流中
++ `void write(String str,int off, int len)`: 将字符串 str 中从 off 位置开始，长度为len的字符写入输出流中
+
+#### 标准输入输出
+Java的标准输入/输出分别通过 `System.in/System.out` 来代表，默认情况下分别代表键盘和显示器，当程序从 System.in 读数据时，实际上是从键盘读取输入；当程序通过 System.out 来输出数据时，数据会显示在屏幕上。
+System类还提供了三个重定向标准输入/输出的方法：
++ `static void setIn(InputStream in)`:  重定向标准输入流
++ `static void setOut(PrintStream out)`: 重定向标准输出流
++ `static void setErr(PrintStream err)`: 重定向标准错误输出流
+
+#### JVM读取其它进程的数据
+我们知道使用 `Runtime` 类的 `Process exec(String command)` 方法可以启动一个进程，并返沪一个 Process 对象， 该 Process 对象代表由 Java 启动的子进程，Process 提供了三个方法用于程序和其子进程进行通信：
++ `OutputStream getOutputStream()`: 获取子进程的输出流，实际对应子进程的输入流，对本进程来说是输出流，用于向子进程写数据
++ `InputStream getInputStream()`: 获取子进程的输入流，实际上对应子进程的输出流，对本进程来说是输入流，用于读取子进程的输出数据
++ `InputStream getErrorStream()`: 获取子进程的错误输入流，实际上对应子进程的错误输出流，对本进程来说是输入流，用于读取子进程的错误输出数据
+
+#### RandomAccessFile
+`RandomAccessFile` 功能非常强大，能够支持随机的读写数据，就是能够随机的从指定位置开始读/写数据，也可以跳过某些数据的读写。`RandomAccessFile`提供两种构造方法来生成对象：
+1. RandomAccessFile(File file, String mode)
+2. RandomAccessFile(String name, String mode)
+mode 参数指定 RandomAccessFile 的访问模式，该参数有如下四个值：
++ "r": 以只读方式打开指定文件
++ "rw": 以读写方式打开指定文件，如果文件不存在，则尝试创建文件
++ "rws": 以读写方式打开指定文件，相对于 "rw"模式，还要求对文件内容或元数据的每个更新都同步写入到底层存储设备。
++ "rwd": 以读写方式打开指定文件，相对于 "rw"模式，还要求对文件内容的每个更新都同步写入到底层存储设备。
+打开一个 `RandomAccessFile` 对象后，可以使用下述两个方法来操纵文件记录指针：
++ `long getFilePointer()`: 获取文件记录指针的位置
++ `void seek(long pos)`: 将文件记录指针定位到指定的 pos 位置。
