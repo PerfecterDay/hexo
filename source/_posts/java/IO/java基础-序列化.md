@@ -2,7 +2,8 @@
 title: Java基础-序列化
 date: 2019-08-18  20:13:04
 tags: java
-category: java
+category: 
+- [java,IO]
 ---
 
 ### 序列化方式

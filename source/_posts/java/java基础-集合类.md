@@ -102,30 +102,23 @@ TreeSet 支持两种排序方法：自然排序和定制排序，默认使用自
 
 1. 自然排序
 
-TreeSet 会调用集合元素的 `int compareTo(T o)` 方法来比较元素之间的大小关系，然后将集合元素按升序排列。因此待插入的元素必须实现 `Comparable` 接口，否则会引发
-`ClassCastException` 。
-
-当调用 obj1.compareTo(obj2) 时，如果返回值大于0，代表 obj1 大于 obj2，等于0代表两者相等，小于0代表 obj1 小于 obj2 。
-
-在这种情况下，对于 TreeSet 集合而言，判断两个对象是否相等的唯一标准是：两个对象通过 compareTo() 方法比较是否返回0。即使 equals() 方法返回true，而 compareTo() 方法返回不为0， TreeSet 也将两者视为不相元素。因此，如果要把对象插入到 TreeSet，且重写了 equals 方法，则应该保证 equals() 相等的两个对象在调用 compareTo() 方法时返回0。
+    TreeSet 会调用集合元素的 `int compareTo(T o)` 方法来比较元素之间的大小关系，然后将集合元素按升序排列。因此待插入的元素必须实现 `Comparable` 接口，否则会引发`ClassCastException` 。 
+    当调用 obj1.compareTo(obj2) 时，如果返回值大于0，代表 obj1 大于 obj2，等于0代表两者相等，小于0代表 obj1 小于 obj2 。    
+    在这种情况下，对于 TreeSet 集合而言，判断两个对象是否相等的唯一标准是：两个对象通过 compareTo() 方法比较是否返回0。即使 equals() 方法返回true，而 compareTo() 方法返回不为0， TreeSet 也将两者视为不相元素。因此，如果要把对象插入到 TreeSet，且重写了 equals 方法，则应该保证 equals() 相等的两个对象在调用 compareTo() 方法时返回0。
 
 2. 定制排序
+    自然排序默认使用升序排列，如果想要实现如降序排列等其它特性，则可以通过 Comparator 接口的帮助来实现。该接口里包含一个 int compare(T o1, T o2) 方法用于比较 o1 和 o2 的大小： 
+    + 如果该方法返回正整数，则表明 o1 大于 o2；
+    + 如果该方法返回负整数，则表明 o1 小于 o2；
+    + 如果该方法返回0，则表明 o1 等于 o2；
+    如果需要实现定制排序，则要在创建 TreeSet 集合时，提供一个 Comparator 对象与该 TreeSet 集合关联，由该 Comparator 负责元素的排序逻辑。
 
-自然排序默认使用升序排列，如果想要实现如降序排列等其它特性，则可以通过 Comparator 接口的帮助来实现。该接口里包含一个 int compare(T o1, T o2) 方法用于比较 o1 和 o2 的大小：
-+ 如果该方法返回正整数，则表明 o1 大于 o2；
-+ 如果该方法返回负整数，则表明 o1 小于 o2；
-+ 如果该方法返回0，则表明 o1 等于 o2
-
-如果需要实现定制排序，则要在创建 TreeSet 集合时，提供一个 Comparator 对象与该 TreeSet 集合关联，由该 Comparator 负责元素的排序逻辑。
-
-在这种情况下，对于 TreeSet 集合而言，判断两个对象是否相等的唯一标准是：两个对象通过 compare() 方法比较是否返回0。即使 equals() 方法返回true，而 compare() 方法返回不为0， TreeSet 也将两者视为不相元素。因此，如果要把对象插入到 TreeSet，且重写了 equals 方法，则应该保证 equals() 相等的两个对象在调用 compare() 方法时返回0。
+    在这种情况下，对于 TreeSet 集合而言，判断两个对象是否相等的唯一标准是：两个对象通过 compare() 方法比较是否返回0。即使 equals() 方法返回true，而 compare() 方法返回不为0， TreeSet 也将两者视为不相元素。因此，如果要把对象插入到 TreeSet，且重写了 equals 方法，则应该保证 equals() 相等的两个对象在调用 compare() 方法时返回0。
 
 ### EnumSet
 ### 各个 Set 实现类的性能分析
-HashSet 和 TreeSet 是 Set 的两个典型实现， HashSet 总是比 TreeSet 的性能好，因为 TreeSet 需要额外的红黑树来维护集合元素次序，只有当需要保持排序的 Set 时，才应该考虑使用 TreeSet。
-
-LinkedHashSet 的插入、删除操作要比 HashSet 略慢，这是由于要维护链表所带来的额外开销所致，但是由于有了链表，在遍历集合元素时会更快。
-
+HashSet 和 TreeSet 是 Set 的两个典型实现， HashSet 总是比 TreeSet 的性能好，因为 TreeSet 需要额外的红黑树来维护集合元素次序，只有当需要保持排序的 Set 时，才应该考虑使用 TreeSet。  
+LinkedHashSet 的插入、删除操作要比 HashSet 略慢，这是由于要维护链表所带来的额外开销所致，但是由于有了链表，在遍历集合元素时会更快。 
 EnumSet 是所有 Set 中性能最好的，但它只能保存同一个枚举类的枚举值作为集合元素。
 
 ## List 集合
@@ -223,8 +216,6 @@ LinkedList 既实现了 List 接口，同时也实现了 Deque 接口。因此�
 
 ## HashMap 和 Hashtable 的区别
 1. Hashtable 是一个线程安全的 Map 实现，但 HashMap不是线程安全的，所以 HashMap 性能会更好点
-2. Hashtable 不允许使用 null 作为 key 和 value。如果试图把 null 放入 Hashtable 将会引发 NPE，但 HashMap 可以使用 null 作为 key 或 value
-
-与 HashSet 类似， HashMap 、 Hashtable 判断两个 key 相等的标准也是： 两个 key 通过 equals() 方法返回 true ，且 hashCode() 返回值也相同。
-
+2. Hashtable 不允许使用 null 作为 key 和 value。如果试图把 null 放入 Hashtable 将会引发 NPE，但 HashMap 可以使用 null 作为 key 或 value。     
+与 HashSet 类似， HashMap 、 Hashtable 判断两个 key 相等的标准也是： 两个 key 通过 equals() 方法返回 true ，且 hashCode() 返回值也相同。    
 另外， HashMap 、 Hashtable 中还有一个 containsValue() 方法，用于判断是否包含指定 value。此时，判断是否与 value 相等的标准更简单：只需要 equals 方法返回 true 即可。

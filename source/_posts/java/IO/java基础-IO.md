@@ -121,3 +121,4 @@ mode 参数指定 RandomAccessFile 的访问模式，该参数有如下四个值
 打开一个 `RandomAccessFile` 对象后，可以使用下述两个方法来操纵文件记录指针：
 + `long getFilePointer()`: 获取文件记录指针的位置
 + `void seek(long pos)`: 将文件记录指针定位到指定的 pos 位置。
+RandomAccessFile 还包含类似于了 InputStream/OutputStream 中的三种 read()/write() 方法，用法是完全一样的，另外还包含了系列方便的 readXXX 和 writeXXX 方法。

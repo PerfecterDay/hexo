@@ -12,17 +12,18 @@ category: docker
 4. 如何确定自己是否是登录到一台物理机/虚拟机/容器shell中： systemd-detect-virt -c
    
 #### 镜像操作
-0. `docker build -t [<仓库名>[:<标签>] 镜像构建上下文路径` : 利用 Dockerfile 来制作镜像
-1. `docker search xxx`: 查找镜像
-2. `docker pull &lt;image_name&gt;`: 从 Registry 下载镜像
-3. `docker push &lt;image_name&gt;`: 上传到 Registry ，默认dockerHub
-4. `docker images` : 查看docker镜像
-5. `docker image ls -a`: 查看所有镜像
-6. `docker image ls &lt;image_name&gt;`: 查看指定镜像
-7. `docker image inspect &lt;image_name&gt;`: 查看指定镜像的详细信息
-8. `docker image rm [选项] &lt;镜像1&gt; [&lt;镜像2&gt; ...]`: 删除镜像
-9. `docker image prune`: 删除虚悬镜像(dangling image)
-10. `docker commit [选项] <容器ID或容器名> [<仓库名>[:<标签>]]` : 将修改后的容器保存为镜像
+0. `docker build -t [<仓库名>:<标签>] 镜像构建上下文路径` : 利用 Dockerfile 来制作镜像
+1. `docker build -f path/to/dockerfile -t [<仓库名>:<标签>] 镜像构建上下文路径` : 利用指定的 Dockerfile 来制作镜像
+2. `docker search xxx`: 查找镜像
+3. `docker pull <image_name>;`: 从 Registry 下载镜像
+4. `docker push <image_name<`: 上传到 Registry ，默认dockerHub
+5. `docker images` : 查看docker镜像
+6. `docker image ls -a`: 查看所有镜像
+7. `docker image ls <image_name<`: 查看指定镜像
+8. `docker image inspect <image_name<`: 查看指定镜像的详细信息
+9. `docker image rm [选项] <镜像1< [<镜像2< ...]`: 删除镜像
+10. `docker image prune`: 删除虚悬镜像(dangling image)
+11. `docker commit [选项] <容器ID或容器名> [<仓库名>[:<标签>]]` : 将修改后的容器保存为镜像
 
 ##### Dockerfile 镜像指令
 当构建的时候，用户会指定构建镜像上下文的路径，docker build 命令得知这个路径后，会将路径下的所有内容打包，然后上传给 Docker 引擎。这样 Docker 引擎收到这个上下文包后，展开就会获得构建镜像所需的一切文件。  
