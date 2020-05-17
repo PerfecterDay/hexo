@@ -64,4 +64,10 @@ category: git
 18. `git push remote --delete remotebranch` :删除remote的remotebranch分支
 19. `git push` : 如果当前分支只有一个追踪分支，那么主机名都可以省略
 
+### 常见问题
+1. windows乱码：  
+    使用git bush时，使用git add XX 添加文件后，git status 发现中文文件名是数字形式，比如"\123\456\789.txt"，点击也无法打开，二使用ls，git log都可以显示中文，最后修改配置:
+    `git config --global core.quotepath false ` 解决
+
+
 

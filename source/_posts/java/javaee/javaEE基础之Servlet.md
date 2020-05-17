@@ -72,7 +72,7 @@ public class HelloServlet extends HttpServlet{...}
 2. Dynamic addServlet(String var1, Servlet var2); 
 3. Dynamic addServlet(String var1, Class<? extends Servlet> var2);
 ```
-与编程式添加 Listener 和 Filter 一样，这必须要在在 `ServletContext` 配置完成之前完成，因为容器会根据 `ServletContext` 配置决定加载哪些 Listener/Filter/Servlet. 所以要在 `ServletContextListener` 的 `contextInitialized()` 方法或者 `ServletContainerInitializer` 中的 `onStartup()` 中注册 Listener 。
+与编程式添加 Listener 和 Filter 一样，这必须要在在 `ServletContext` 配置完成之前完成，因为容器会根据 `ServletContext` 配置决定加载哪些 Listener/Filter/Servlet. 所以要在 `ServletContextListener` 的 `contextInitialized()` 方法或者 `ServletContainerInitializer` 中的 `onStartup()` 中注册 Servlet 。
 
 ## 使用 HttpServletRequest
 `HttpServletRequest` 是对 `ServletRequest` 的扩展，可以提供关于收到请求的额外的与 HTTP 协议相关的信息。通过它可以获取 HTTP 请求的详细信息。

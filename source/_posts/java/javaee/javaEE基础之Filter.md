@@ -61,6 +61,6 @@ public class FilterDemo02 implements Filter {
 2. javax.servlet.FilterRegistration.Dynamic addFilter(String var1, Filter var2); 
 3. javax.servlet.FilterRegistration.Dynamic addFilter(String var1, Class<? extends Filter> var2);
 ```
-与编程式添加 Servlet 和 Listener 一样，这必须要在在 `ServletContext` 配置完成之前完成，因为容器会根据 `ServletContext` 配置决定加载哪些 Listener/Filter/Servlet. 所以要在 `ServletContextListener` 的 `contextInitialized()` 方法或者 `ServletContainerInitializer` 中的 `onStartup()` 中注册 Listener。
+与编程式添加 Servlet 和 Listener 一样，这必须要在在 `ServletContext` 配置完成之前完成，因为容器会根据 `ServletContext` 配置决定加载哪些 Listener/Filter/Servlet. 所以要在 `ServletContextListener` 的 `contextInitialized()` 方法或者 `ServletContainerInitializer` 中的 `onStartup()` 中注册 Filter。
 
 ## 过滤器排序
