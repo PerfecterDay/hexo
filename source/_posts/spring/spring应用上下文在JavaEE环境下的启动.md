@@ -1,5 +1,5 @@
 ---
-title: Spring 应用上下文在 JavaEE 环境下的启动与三种配置方式
+title: Spring 应用上下文的启动与三种 bean 配置方式
 date: 2019-05-06  21:05:20
 tags: spring            
 category: spring
@@ -7,11 +7,12 @@ category: spring
 
 ## Spring Framework 的启动
 Spring Framework 是另一个容器，它可以运行任何 Java SE和 Java EE  容器中，并作为应用程序的运行时环境。另外，如同计算机或者jvm的那个样例一样， Spring 必须被启动并且需要得到如何运行它所包含的应用程序的指令。
-
 配置和启动 Spring Framework 是两个不同的任务，并且相互独立，都可以通过多种方式实现。配置告诉 Spring 如何运行它所包含的应用程序时，启动进程将启动 Spring Framework并将配置指令传递给它。
 
-在 Java SE 中，只有一种方式启动 Spring Framework：通过应用程序的 main 方法以编程的方式启动。在 Java EE 应用程序中，有两种选择：
-可以使用 XML 创建部署描述符启动 Spring，也可以在 `javax.servlet.ServletContainerInitializer` 中通过编程的方式启动。
+在 Java SE 中，只有一种方式启动 Spring Framework：通过应用程序的 main 方法以编程的方式启动。
+在 Java EE 应用程序中，有两种选择：
+1. 可以使用 XML 创建部署描述符启动 Spring
+2. 也可以在 `javax.servlet.ServletContainerInitializer` 中通过编程的方式启动。
 
 ### 部署描述符启动
 传统的 Spring Framework 应用程序总是使用 Java EE 的部署描述符启动。配置文件中至少包含一个 `DispatcherServlet` 的实例，然后以 `contextConfugLocation` 初始化参数的形式为它提供配置文件。也可以包含多个 `DispatcherServlet` 实例。另外，一般还会配置 `ContextLoaderListener` 实例加上 `contextConfigLocation`的上下文参数。参数为其典型的配置如下：
@@ -51,35 +52,35 @@ Spring Framework 提供了一个桥接口，是这种方式更容易实现。 `o
 Spring Framework 的配置大致可以分为三种方式：
 
 ### 创建 XML 配置
-这是最传统的配置方式，使用 &lt;beans&gt; XML 命名空间，将需要注入的 bean 配置在 ,&lt;bean&gt; b标签下即可配置 bean 。
+这是最传统的配置方式，使用 &lt;beans&gt; XML 命名空间，将需要注入的 bean 配置在 ,&lt;bean&gt; 标签下即可配置 bean 。
 
 ### 创建混合配置
 XML 配置文件的缺点是太繁杂，一个大型的企业级应用中，可能会定义数百个 bean ,每个 bean 都至少要三行代码的话，关是配置文件都要数千行。
 
-spring 注解配置的核心在于 *组件扫描* 和 *注解配置*。 
+spring 注解配置的核心在于 **组件扫描** 和 **注解配置**。 
 #### 组件扫描的开启
-XML 文件中使用 `<context:annotation-config>` 和 `<context:component-scan>` 元素即可开启*组件扫描* 和 *注解配置*。不过`<context:component-scan>` 也有 `<context:annotation-config>` 注解的功能，因此只要配置 `<context:component-scan>` 就能开启上述功能
+XML 文件中使用 `<context:annotation-config>` 和 `<context:component-scan>` 元素即可开启**组件扫描** 和 **注解配置** 。不过`<context:component-scan>` 也有 `<context:annotation-config>` 注解的功能，因此只要配置 `<context:component-scan>` 就能开启上述功能
 
 #### 扫描注解配置
-通过使用注解扫描， Spring 将扫描通过特定注解指定的包去扫描类。扫描路径下的所有标注了 `@Componengt` 注解的类都将变成由 Spring 管理的 Bean，这意味着 Sprint 将负责实例化它们并注入它们的依赖对象。
+通过使用注解扫描， Spring 将扫描通过特定注解指定的包去扫描类。扫描路径下的所有标注了 `@Componengt` 注解的类都将变成由 Spring 管理的 Bean，这意味着 Spring 将负责实例化它们并注入它们的依赖对象。
 
 其它符合组件扫描的注解： 所有标注了 `@Component` 的注解都将变成组件扫描注解，任何标注了一个组件扫描注解的注解也将编程组件扫描注解。因此， 标注了 `@Controller` 、 `@Service`  、 `@Repository` 注解的类也将编程Spring 管理的bean。
 
-与组件扫描注解配合使用的另一个注解是 `@Autowired` 。可以未任何公开、保护和私有的字段或接受一个或多个参数的 *设置方法* 标注 `@Autowired`。 `@Autowired` 生命了 Spring 实例化之后应该注入的依赖对象，并且它也可以用于构造器。通常Spring管理的bean类必须有无参构造函数，但对于只含有一个标注了 `@Autowired` 的构造器的类， Spring 将使用该构造器并注入所有的构造器参数。
+与组件扫描注解配合使用的另一个注解是 `@Autowired` 。可以为任何公开、保护和私有的字段或接受一个或多个参数的 **设置方法** 标注 `@Autowired`。 `@Autowired` 声明了 Spring 实例化之后应该注入的依赖对象，并且它也可以用于构造器。通常Spring管理的bean类必须有无参构造函数，但对于只含有一个标注了 `@Autowired` 的构造器的类， Spring 将使用该构造器并注入所有的构造器参数。
 
 任何情况下，如果Spring无法为依赖找到匹配的bean，将抛出异常并启动失败。
 
-同样，如果为依赖找多个匹配的 bean，它也将抛出异常并启动失败。这种情况下，可以使用 `@Qualifier` 或 `@Primary` 注解解决。 通过 `@Qualifier` 可以使用指定名字的依赖。而使用 `@Primary` 标注的类表示在出现多个符合条件的依赖时，应该优先使用它。
+同样，如果为依赖找到多个匹配的 bean，它也将抛出异常并启动失败。这种情况下，可以使用 `@Qualifier` 或 `@Primary` 注解解决。 通过 `@Qualifier` 可以使用指定名字的依赖。而使用 `@Primary` 标注的类表示在出现多个符合条件的依赖时，应该优先使用标注了该注解的bean。
 
 ### 使用 @Configuration 配置
 上述两种配置方式基本上都还是要依赖 XML ，第二种方式中要在 XML 中开启注解组件扫描和启用注解配置功能。不过，在使用 XML 配置Spring时有一些缺点：
 1. XML 难于调试。
 2. 不能对 XML 配置进行单元测试。因为 XML 配置会启动整个应用程序并加载所有 bean ，实际上不是单元测试而是继承测试。
 
-使用 `AnnotationConfigWebApplicationContext` 启动 Spring ，并调用该类的 `register()` 方法注册配置类即可实现 java 配置。这些配置类必须标注上 `@Configuration` 注解，也必须有默认构造函数，配置类中标注了 `@Bean` 注解的无参方法将注册 bean。
+使用 `AnnotationConfigWebApplicationContext` 启动 Spring ，并调用该类的 `register(Class<T> configClass)` 方法注册配置类即可实现 java 配置。 这些配置类必须标注上 `@Configuration` 注解，也必须有默认构造函数，配置类中标注了 `@Bean` 注解的无参方法将注册 bean。
 
 在配置类中可以使用下列注解代替 XML 中的一些配置元素：
-1. `@Component` : 替代的是 `<context:component-scan>` ，启用组件扫描功能
+1. `@ComponentScan` : 替代的是 `<context:component-scan>` ，启用组件扫描功能
 2. `@EnableAspectAutoProxy` : 替代的是 `<aop:aspect-autoprooxy>` 元素，启用对标注了 `@Aspect` 注解的类的处理，面向切面编程时使用
 3. `@EnableAsync` : 替代的是 `<async:*>` 命名空间，启用Spring的异步 `@Async` 方法执行
 4. `@EnableCaching` : 替代的是 `<cache:*>` 命名空间。
@@ -89,10 +90,19 @@ XML 文件中使用 `<context:annotation-config>` 和 `<context:component-scan>`
 
 另外，某些情况下，我们不得不使用 XML 配置，比如要注入某个 Jar 包中的 Bean ，无法为该 bean 的类标注上类似 `@Component` 的注解。我们可以使用 `@Import` 和 `@ImportResource` 注解来加载其它配置类或 XML 配置文件。
 ```
+//Java注解的方式配置 Bean
 @Configuration
 @Import({DatabaseConfiguration.class, ClusterConfiguraton.class})
 @ImportResource("classpath:com/wrox/config/spring-security.xml)
+@ComponentScan("com.baicy.wang")
 public class ExampleConfiguration{
+    @Bean
+    public Bean getBean(){
+        return new Bean();
+    }
     .....
 }
+//使用上述配置启动上下文
+AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+context.register(ExampleConfiguration.class);
 ```

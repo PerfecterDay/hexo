@@ -21,8 +21,8 @@ mysql 参数有 **静态参数** 和 **动态参数** 之分：
 2. 静态参数在实例运行后便不可更改。
 使用 **set** 命令可以对动态的参数值进行修改：
 ```
-set | [global | session ] system_var_name=expr
-| [@@global. | @@session. | @@]system_var_name=expr
+set [global | session ] system_var_name=expr
+set [@@global. | @@session. | @@]system_var_name=expr
 ```
 有些参数只能在会话中修改，有些参数可以在整个生命周期中都会生效，有些参数既可以在会话中生效又可以在整个实例的生命周期内生效。
 使用 `show variables like 'xxx'` 可以查看参数配置的值。
@@ -71,7 +71,7 @@ Innodb 存储引擎以索引组织表的形式来存储数据，所有的数据�
 
 innodb 采用将存储数据按表空间进行存放的设计，默认配置下会有一个初始大小10M的名为 ibdata1 的文件，该文件就是默认的表空间文件。用户可以通过参数 `innodb_data_file_path` 对默认表空间文件进行设置。设置表空间文件后，所有基于 innodb 存储引擎的表的数据都会保存到该共享表空间中。
 
-若设置了 `innodb_file_per_table = on`, mysql 会为每张基于 innodb 引擎的表产生独立的表空间文件，命名规则为：表名.ibd。这些单独的表空间文件仅存储该表的数据、索引和插入缓冲BITMAP等信息，其余信息如回滚信息（UNDO）、插入缓冲索引页、系统事务信息、双写缓冲等还是存在共享表空间中。
+若设置了 `innodb_file_per_table = on`, mysql 会为每张基于 innodb 引擎的表产生独立的表空间文件，命名规则为：表名.ibd。这些单独的表空间文件仅存储该表的**数据、索引和插入缓冲BITMAP**等信息，其余信息如回滚信息（UNDO）、插入缓冲索引页、系统事务信息、双写缓冲等还是存在共享表空间中。
 
 ##### 分区表
 + 查看分区：

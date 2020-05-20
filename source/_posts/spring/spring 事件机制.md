@@ -1,6 +1,6 @@
 ---
 title: spring 事件机制
-date: 2018-05-13  21:40:23
+date: 2018-05-13 21:40:23
 tags: spring            
 category: spring
 ---

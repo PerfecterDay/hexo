@@ -77,9 +77,9 @@ Checkpoint 技术主要用来解决以下几个问题：
     + FLUSH_LRU_LIST Checkpoint  
         当从LRU List 末尾移除页时，如果是脏页，需要进行Checkpoint。
     + Async/Sync Flush Checkpoint
-        当重做日志不可用时，需要从脏页列表中将一些脏页刷新回脏页。这操作自 1.2.x之后放入到 Page Cleaner Thread 中完成。
+        当重做日志不可用时，需要从脏页列表中将一些脏页刷新回磁盘。这操作自 1.2.x之后放入到 Page Cleaner Thread 中完成。
     + Dirty Page too much Checkpoint
-        当缓冲池中脏页数量达到一定比例时（`innodb_max_dirty_page_pct` 参数设置），innodb 存储引擎回强制 Checkpoint，释放缓冲池内存. 
+        当缓冲池中脏页数量达到一定比例时（`innodb_max_dirty_page_pct` 参数设置），innodb 存储引擎会强制 Checkpoint，释放缓冲池内存. 
 
 ### Innodb 关键特性
 1. 插入缓冲

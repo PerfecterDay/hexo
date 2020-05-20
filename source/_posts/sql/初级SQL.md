@@ -217,3 +217,12 @@ case
     else result
 end as column_name
 ```
+统计指定条件下的数据(统计hit_cache='true'的总合)：
+```
+sum(
+case 
+    when hit_cache='true' then 1 
+    else 0 
+    end
+)
+```

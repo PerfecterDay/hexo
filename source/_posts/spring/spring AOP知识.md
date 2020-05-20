@@ -1,80 +1,124 @@
 ---
-title: spring AOP知识
+title: spring AOP
 date: 2018-06-03  10:35:25
 tags: spring            
 category: spring
 ---
-注：主要是转载文章：https://segmentfault.com/a/1190000007469968
 
 # Spring AOP知识总结
 
+## 实现机制
+1. 动态代理
+    引入动态代理后，我们可以将横切关注点逻辑（增强）封装到动态代理的 InvocationHandler 接口中，然后在运行期间，根据横切关注点的需要织入的模块位置，将横切逻辑织入到相应的代理类中。这种方式的缺点是所有要织入横切逻辑的模块类都要实现相应的接口，因为动态代理只对接口有效。
+2. 动态字节码增强
+    使用ASM或者CGLIB等Java工具库，在程序运行期间，动态生成字节码文件，为需要织入横切逻辑的模块类动态生成相应的子类，将横切逻辑加到这些子类中。这样就可以克服动态代理需要实现接口的限制，不过字节码增强无法扩展final类和final方法。
+
 ## 概念术语
 ### 连接点(join point)
-    a point during the execution of a program, such as the execution of a method or the handling of an exception. In Spring AOP, a join point always represents a method execution.
-
-程序运行中的一些时间点, 例如一个方法的执行, 或者是一个异常的处理.在 Spring AOP 中, `join point` 总是方法的执行点, 即只有方法连接点,不可以在类上增强。
+程序运行中的一些时间点, 例如一个方法的执行，构造方法的调用，属性设置及获取，或者是一个异常的处理等.但是在 Spring AOP 中, `join point` 总是方法的执行点, 即只支持方法连接点,不可以在类上增强。
 
 ### 切点(point cut)
 匹配 `join point` 的谓词(a predicate that matches join points).
 `Advice` 是和特定的 `point cut` 关联的, 并且在 `point cut` 相匹配的 `join point` 中执行. 
-在 Spring 中, 所有的方法都可以认为是 `joinpoint`, 但是我们并不希望在所有的方法上都添加 `Advice`, 而 `pointcut` 的作用就是提供一组规则(使用 AspectJ pointcut expression language 来描述) `来匹配joinpoint`, 给满足规则的 `joinpoint` 添加 `Advice`.
+在 Spring 中, 所有的方法都可以认为是 `joinpoint`, 但是我们并不希望在所有的方法上都添加 `Advice`, 而 `pointcut` 的作用就是提供一组规则(使用 AspectJ pointcut expression language 来描述) 来匹配`joinpoint`, 给满足规则的 `joinpoint` 添加 `Advice`.
 
-简而言之，切点就是用来筛选哪些连接点需要织入增强代码的。
+简而言之，切点就是用来筛选哪些连接点需要织入增强代码的。  
+Pointcut接口的声明如下：
+```
+public interface  {
+    Pointcut TRUE = TruePointcut.INSTANCE;
 
-![Spring 中 Pointcut 类图](/pics/Pointcut.png)
+    ClassFilter getClassFilter();
+
+    MethodMatcher getMethodMatcher();
+}
+```
+ClassFilter 和 MethodMatcher 分别用于匹配将被织入横切逻辑的对象和相应的方法，即类型匹配和方法匹配。
+![Spring 中 Pointcut 定义](/pics/Pointcut.png)
+常见的 Pointcut:
+1. NameMatchMethodPointcut
+2. JdkRegexpMethodPointcut
+3. AnnotationMatchingPointcut
+4. ComposablePointcut
 
 ### 关于`join point` 和 `point cut` 的区别
 在 Spring AOP 中, 所有的方法执行都是 `join point`. 而 `point cut` 是一个描述信息, 它修饰的是 `join point`, 通过 `point cut`, 我们就可以确定哪些 `join point` 可以被织入 Advice. 因此 `join point` 相当于数据库中的记录， 而 `point cut` 相当于带有查询条件查询出来的记录。
 `advice` 是在 `join point `上执行的, 而 `point cut` 规定了哪些 `join point` 可以执行哪些 `advice`.
 
 ### 增强（ Advice )
-![Spring 中 Advice 继承类图](/pics/Advice.png)
+按照Advice实例能否在目标对象类的所有实例间共享这一标准，可以将Advice分为 per-class 和 per-instance 类型：
++ per-class类型的 Advice，可以在所有目标类对象之间共享，不会保存任何目标对象的状态或者添加新特性。
+
+  1. Before Advice: 在连接点指定位置之前执行的增强类型。
+  2. After Advice: 在连接点指定位置之后执行的增强类型，该类型还有三种子类型：
+     1. After returning advice: 只有切点处执行流程正常完成后，才会执行
+     2. After throwing advice: 只有切点处执行流程抛出异常的情况下，才会执行
+     3. After advice: 不管切点是正常执行还是异常了都会执行，相当于 finally 块一样。
+  3. Around Advice（Interceptor）: 可以在切点之前和之后都指定相应的逻辑，甚至于中断或者忽略切点原来的程序流程的执行
+  ![Spring 中 Advice 继承类图](/pics/Advice.png)
++ per-instance类型的 Advice，Advice对象不会在目标类对象的实例之间共享。不同的目标对象创建不同的Advice实例。
+  Introduction: 可以为原有的对象添加新的特性或者行为,Spring中主要使用 IntroductionInterceptor 接口来实现。
+  <img src="/pics/aop-introduction.png" alt="">
 
 ### 切面 (aspect)
-`aspect` 由 `pointcut` 和 `advice` 组成, 它既包含了横切逻辑的定义, 也包括了连接点的定义. Spring AOP就是负责实施切面的框架, 它将切面所定义的横切逻辑织入到切面所指定的连接点中.
+`aspect` 由 `pointcut` 和 `advice` 组成, 它既包含了横切逻辑(增强)的定义, 也包括了连接点的定义. Spring AOP就是负责实施切面的框架, 它将切面所定义的横切逻辑织入到切面所指定的连接点中.
 AOP的工作重心在于如何将增强织入目标对象的连接点上, 这里包含两个工作:
 
 1. 如何通过 `pointcut` 和 `advice` 定位到特定的 joinpoint 上
 2. 如何在 `advice` 中编写切面代码.
 
-Spring 中使用 org.springframework.aop.Advisor 接口表示切面。
-![Spring 中 Advisor 类图](/pics/Advisor.png)
+Spring 中使用 org.springframework.aop.Advisor 接口表示切面。可以划分为 PointcutAdvisor 和 IntroductionAdvisor 两个分支。
+1. PointcutAdvisor
+    ![Spring 中 Advisor 类图](/pics/Advisor.png)
+2. IntroductionAdvisor
+    IntroductionAdvisor 的类层次比较简单，只有一个 DefaultIntroductionAdvisor 的默认实现。
 
 ### 织入(Weaving)
 将 aspect 和其他对象连接起来, 并创建 adviced object 的过程.
 
 根据不同的实现技术, AOP织入有三种方式:
 
-* 编译器织入, 这要求有特殊的Java编译器.
-* 类装载期织入, 这需要有特殊的类装载器.
-* 动态代理织入, 在运行期为目标类添加增强(Advice)生成子类的方式.
+* 编译器织入, 这要求有特殊的Java编译器.AspectJ的 ajc 编译器
+* 类装载期织入, 这需要有特殊的类装载器. Jboss AOP 自定义的ClassLoader
+* 动态代理织入, 在运行期为目标类添加增强(Advice)生成代理类的方式.
 
-Spring 采用动态代理织入, 而AspectJ采用编译器织入和类装载期织入.
+Spring 采用动态代理织入, 而AspectJ采用编译器织入和类装载期织入。
+上述所有的概念可以由下面这张图大致概括：
+<img src="/pics/spring-aop.png" alt="" height=60% width=60%>
 
-## Spring 自动创建代理
-Spring 提供了自动代理机制，让容器自动生成代理，把开发人员从繁琐的配置工作中解放出来。在内部，Spring 使用 BeanPostProcessor 自动完成这项工作。
+## Spring AOP 的织入
+AspectJ使用 ajc 编译器作为它的织入器，Jboss AOP 自定义的ClassLoader作为织入器， Spring AOP 中使用 ProxyFactory 作为织入器。使用 ProxyFactory 很简单，只需要以下3步：
+1. 第一就是告诉它你要织入的目标对象：可以在构造函数中直接传入，也可以用setter方法设置
+2. 第二就是告诉它要应用到目标对象的Aspect(Advisor)或者直接告诉它Advice：addAdvisor()/addAdvice()
+3. 最后直接调用 ProxyFactory 的 getProxy() 方法就可以获得增强的代理对象
+```
+ProxyFactory proxyFactory = new ProxyFactory(targetObj);
+//或者 proxyFactory.setTarget(targetObj);
+proxyFactory.addAdvisor(advisor);
+//或者 proxyFactory.addAdvice(advice);
+Object proxy = proxyFactory.getProxy();
+```
+默认情况下，如果目标对象实现了接口， ProxyFactory 会使用 JDK 的动态代理生成代理对象，下述三种情况会使用基于类的代理：
+1. 目标类没有实现任何接口，忽略 proxyTargetClass 的值
+2. 如果 ProxyFactory 的 proxyTargetClass 属性为 true
+3. 如果 ProxyFactory 的 optimize 属性为 true
 
+上述方式主要是对于编程式AOP的支持。另外，为了支持容器，Spring提供了 ProxyFactoryBean 来支持配置式的AOP。
+
+### Spring AOP 的自动织入
+Spring 提供了自动代理机制，让容器自动生成代理，把开发人员从繁琐的配置工作中解放出来。在内部，Spring 使用 BeanPostProcessor 自动完成这项工作。只要提供一个 BeanPostProcessor，这个 BeanPostProcessor 在对象实例化时，为符合条件的 bean 生成代理对象并返回，而不是返回实例化的目标 bean 本身，可以用下述伪代码表示大致过程：
+```
+for(bean in beanfactory){
+    if(如果要为该bean 生成代理对象){
+        Object proxy = createProxy(bean);
+        return proxy;
+    }else{
+        Object instance = createInstance(bean);
+        return instance;
+    }
+}
+```
 ![Spring 中 ProxyCreator 类图](/pics/ProxyCreator.png)
-
-## 彻底理解 aspect, join point, point cut, advice
-看完了上面的理论部分知识, 我相信还是会有不少朋友感觉到 AOP 的概念还是很模糊, 对 AOP 中的各种概念理解的还不是很透彻. 其实这很正常, 因为 AOP 中的概念是在是太多了, 我当时也是花了老大劲才梳理清楚的.
-下面我以一个简单的例子来比喻一下 AOP 中 aspect, jointpoint, pointcut 与 advice 之间的关系.
-
-让我们来假设一下, 从前有一个叫爪哇的小县城, 在一个月黑风高的晚上, 这个县城中发生了命案. 作案的凶手十分狡猾, 现场没有留下什么有价值的线索. 不过万幸的是, 刚从隔壁回来的老王恰好在这时候无意中发现了凶手行凶的过程, 但是由于天色已晚, 加上凶手蒙着面, 老王并没有看清凶手的面目, 只知道凶手是个男性, 身高约七尺五寸. 爪哇县的县令根据老王的描述, 对守门的士兵下命令说: 凡是发现有身高七尺五寸的男性, 都要抓过来审问. 士兵当然不敢违背县令的命令, 只好把进出城的所有符合条件的人都抓了起来.
-
-来让我们看一下上面的一个小故事和 AOP 到底有什么对应关系.
-首先我们知道, 在 Spring AOP 中 join point 指代的是所有方法的执行点, 而 point cut 是一个描述信息, 它修饰的是 join point, 通过 point cut, 我们就可以确定哪些 join point 可以被织入 Advice. 对应到我们在上面举的例子, 我们可以做一个简单的类比, join point 就相当于 爪哇的小县城里的百姓, point cut 就相当于 老王所做的指控, 即凶手是个男性, 身高约七尺五寸, 而 advice 则是施加在符合老王所描述的嫌疑人的动作: 抓过来审问.
-为什么可以这样类比呢?
-
-* `join point` --> 爪哇的小县城里的百姓: 因为根据定义, join point 是所有可能被织入 advice 的候选的点, 在 Spring AOP中, 则可以认为所有方法执行点都是 join point. 而在我们上面的例子中, 命案发生在小县城中, 按理说在此县城中的所有人都有可能是嫌疑人.
-
-* `pointcut` --> 男性, 身高约七尺五寸: 我们知道, 所有的方法(joint point) 都可以织入 advice, 但是我们并不希望在所有方法上都织入 advice, 而 pointcut 的作用就是提供一组规则来匹配joinpoint, 给满足规则的 joinpoint 添加 advice. 同理, 对于县令来说, 他再昏庸, 也知道不能把县城中的所有百姓都抓起来审问, 而是根据凶手是个男性, 身高约七尺五寸, 把符合条件的人抓起来. 在这里 凶手是个男性, 身高约七尺五寸 就是一个修饰谓语, 它限定了凶手的范围, 满足此修饰规则的百姓都是嫌疑人, 都需要抓起来审问.
-
-* `advice` --> 抓过来审问, advice 是一个动作, 即一段 Java 代码, 这段 Java 代码是作用于 point cut 所限定的那些 join point 上的. 同理, 对比到我们的例子中, 抓过来审问 这个动作就是对作用于那些满足 男性, 身高约七尺五寸 的爪哇的小县城里的百姓.
-
-* `aspect`: aspect 是 point cut 与 advice 的组合, 因此在这里我们就可以类比: "根据老王的线索, 凡是发现有身高七尺五寸的男性, 都要抓过来审问" 这一整个动作可以被认为是一个 aspect.
-
-或则我们也可以从语法的角度来简单类比一下. 我们在学英语时, 经常会接触什么 定语, 被动句 之类的概念, 那么可以做一个不严谨的类比, 即 joinpoint 可以认为是一个 宾语, 而 pointcut 则可以类比为修饰 joinpoint 的定语, 那么整个 aspect 就可以描述为: 满足 pointcut 规则的 joinpoint 会被添加相应的 advice 操作.
 
 ## @AspectJ 支持
 @AspectJ 是一种使用 Java 注解来实现 AOP 的编码风格.

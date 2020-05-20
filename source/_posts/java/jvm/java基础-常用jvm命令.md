@@ -112,3 +112,6 @@ jinfo(JVM Configuration info)这个命令作用是实时查看和调整虚拟机
 + -flag : 输出指定args参数的值
 + -flags : 不需要args参数，输出所有JVM参数的值
 + -sysprops : 输出系统属性，等同于System.getProperties()
+
+
+jhsdb jmap --heap --pid 8560

@@ -4,7 +4,8 @@ date: 2019-05-15  22:14:26
 tags: maven          
 category: maven
 ---
-0. `mvn -B archetype:generate  -DgroupId=com.my -DartifactId=simple-weather -DpackageName=com.baicy -Dversion=1.0 `: 创建新项目，可能需要删除 settings配置文件中 archetypeRepository 和 archetypeCatalog 配置。 
+0. `mvn -B archetype:generate  -DgroupId=com.my -DartifactId=simple-weather -DpackageName=com.baicy -Dversion=1.0 `: 以batch模式创建新项目，会选择 Archetype ，可能需要删除 settings配置文件中 archetypeRepository 和 archetypeCatalog 配置。
+1. `mvn archetype:generate  -DarchetypegroupId=com.my -DarchetypeArtifactId=simple-archetype -DarchetypeVersion=1.0 `:使用指定的 Archetype 生成项目。
 2. ` mvn dependency:list` ：输出依赖所有依赖的包
 3. ` mvn dependency:tree -Dverbose` ：输出依赖树，解决依赖冲突时有用
 4. ` mvn dependency:analyze` ：分析依赖树

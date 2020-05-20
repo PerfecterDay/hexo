@@ -1,5 +1,5 @@
 ---
-title: java基础-数据类型和数组
+title: java基础-入门，数据类型和数组
 date: 2019-03-06  21:11:40
 tags: java
 category: java
