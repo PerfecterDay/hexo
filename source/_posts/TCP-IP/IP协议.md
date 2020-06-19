@@ -1,8 +1,8 @@
 ---
 title: IP协议
 date: 2019-12-0921:48:26
-tags: tcp/ip
-category: tcp/ip
+tags: 网络协议
+category: 网络协议
 ---
 
 IP是TCP/IP协议族中最为核心的协议。所有的TCP、UDP、ICMP及IGMP数据都以IP数据报格式传输(见图1-4)。许多刚开始接触TCP/IP的人对IP提供不可靠、无连接的数据报传送服务感到很奇怪，特别是那些具有X.25或SNA背景知识的人。
