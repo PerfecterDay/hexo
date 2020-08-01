@@ -2,7 +2,8 @@
 title: springmvc中ContextLoaderListener分析
 date: 2018-09-27 21:00:00
 tags: spring
-category: spring
+category:
+- [spring,MVC]
 ---
 
 典型的Spring mvc项目的 web.xml配置：

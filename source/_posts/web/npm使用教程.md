@@ -18,7 +18,7 @@ npm 是随同 Node 一起安装的包管理工具，类似于java开发中 Maven
 ## npm配置查看及更改
 1. `npm config list`：查看npm配置项。
 2. `npm config ls -l`：查看npm所有配置项。
-3. `npm set key = value`：更改配置项key的值为value，`npm set registry="https：//registry.npm.taobao.org/"`->修改npm中央仓库。
+3. `npm set key = value`：更改配置项key的值为value，`npm set registry="https://registry.npm.taobao.org/"`->修改npm中央仓库。
 
 ## npm安装依赖包
 npm作为一款js的包管理工具,主要作用是对前端项目的依赖包进行管理。

@@ -2,7 +2,8 @@
 title: spring mvc整体运行流程和架构
 date: 2018-05-11 11:02:00
 tags: spring
-category: spring
+category: 
+- [spring,MVC]
 ---
 
 # 整体运行流程

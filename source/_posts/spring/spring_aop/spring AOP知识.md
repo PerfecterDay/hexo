@@ -2,7 +2,8 @@
 title: spring AOP
 date: 2018-06-03  10:35:25
 tags: spring            
-category: spring
+category: 
+- [spring,AOP]
 ---
 
 # Spring AOP知识总结
@@ -61,7 +62,7 @@ ClassFilter 和 MethodMatcher 分别用于匹配将被织入横切逻辑的对�
   <img src="/pics/aop-introduction.png" alt="">
 
 ### 切面 (aspect)
-`aspect` 由 `pointcut` 和 `advice` 组成, 它既包含了横切逻辑(增强)的定义, 也包括了连接点的定义. Spring AOP就是负责实施切面的框架, 它将切面所定义的横切逻辑织入到切面所指定的连接点中.
+`aspect` 由 `pointcut` 和 `advice` 组成, 它既包含了横切逻辑(增强)的定义, 也包括了切点的定义. Spring AOP就是负责实施切面的框架, 它将切面所定义的横切逻辑织入到切面所指定的连接点中.
 AOP的工作重心在于如何将增强织入目标对象的连接点上, 这里包含两个工作:
 
 1. 如何通过 `pointcut` 和 `advice` 定位到特定的 joinpoint 上
@@ -79,7 +80,7 @@ Spring 中使用 org.springframework.aop.Advisor 接口表示切面。可以划�
 根据不同的实现技术, AOP织入有三种方式:
 
 * 编译器织入, 这要求有特殊的Java编译器.AspectJ的 ajc 编译器
-* 类装载期织入, 这需要有特殊的类装载器. Jboss AOP 自定义的ClassLoader
+* 类装载期织入, 这需要有特殊的类装载器. Jboss AOP 自定义的 ClassLoader
 * 动态代理织入, 在运行期为目标类添加增强(Advice)生成代理类的方式.
 
 Spring 采用动态代理织入, 而AspectJ采用编译器织入和类装载期织入。

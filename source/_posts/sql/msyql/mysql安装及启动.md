@@ -10,7 +10,14 @@ category:
 ## mysql 安装
 1. 下载zip包，解压到某个目录
 2. 解压目录下创建my.ini文件，配置basedir和datadir路径
-3. 执行mysqld --initialize--console,初始化数据库，会在控制台打印出root账户的随机密码
+   ```
+    [mysqld]
+    # set basedir to your installation path
+    basedir=C:/Program Files (x86)/mysql-8.0.21-winx64
+    # set datadir to the location of your data directory
+    datadir=D:/mysqldata/data
+    ```
+3. 执行 mysqld --initialize --console --user=root ,初始化数据库，会在控制台打印出root账户的随机密码。必须保证配置的 data 目录是空的，否则会报错。
 4. 启动mysqld服务：mysqld
 5. 停止mysqld服务：mysqladmin -u root shutdown，如果要密码加上-p
 6. 执行mysql -hlocalhost -uroot -p连接数据库

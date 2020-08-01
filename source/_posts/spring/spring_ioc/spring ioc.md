@@ -2,7 +2,8 @@
 title: Spring IOC
 date: 2019-08-13 21:34:23
 tags: spring            
-category: spring
+category:
+- [spring,IOC]
 ---
 
 Spring的IoC容器所起的作用就是它会以某种方式加载Configuration Metadata（通常也就是XML格式的配置信息），然后根据这些信息绑定整个系统的对象，最终组装成一个可用的基于轻量级容器的应用系统。

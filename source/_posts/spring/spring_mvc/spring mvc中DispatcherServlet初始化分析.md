@@ -2,7 +2,8 @@
 title: springmvc中DispatcherServlet初始化分析
 date: 2018-09-27 21:54:23
 tags: spring
-category: spring
+category: 
+- [spring,MVC]
 ---
 
 首先看 `DispatcherServlet` 继承关系：
