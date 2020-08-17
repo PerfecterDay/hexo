@@ -3,6 +3,7 @@ title: java基础-基础类库
 date: 2019-03-11  21:14:34
 tags: java
 category: java
+typora-root-url: ..\..
 ---
 
 # 系统相关
@@ -79,7 +80,7 @@ ResourceBundle bundle = ResourceBundle.getBundle("test",locale);
 String str = bundle.getString("hello);
 MessageFormat.format(str,"wzz");
 System.out.println();
-```
+ ```
 
 ## 属性文件加载
 `Properties` 类可以方便的加载配置文件，加载文件后，相当于一个 key/value 都是 String 的 Map。

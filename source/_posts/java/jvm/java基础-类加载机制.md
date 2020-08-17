@@ -4,6 +4,7 @@ date: 2019-02-28  21:17:24
 tags: classLoader
 category: 
 - [java,jvm]
+typora-root-url: ..\..\..
 ---
 原文：https://blog.csdn.net/briblue/article/details/54973413 
 
@@ -45,21 +46,21 @@ static class ExtClassLoader extends URLClassLoader {
                     }
                 }
             }
-
+    
             return instance;
         }
-
+    
         private static Launcher.ExtClassLoader createExtClassLoader() throws IOException {
             try {
                 return (Launcher.ExtClassLoader)AccessController.doPrivileged(new PrivilegedExceptionAction<Launcher.ExtClassLoader>() {
                     public Launcher.ExtClassLoader run() throws IOException {
                         File[] var1 = Launcher.ExtClassLoader.getExtDirs();
                         int var2 = var1.length;
-
+    
                         for(int var3 = 0; var3 < var2; ++var3) {
                             MetaIndex.registerDirectory(var1[var3]);
                         }
-
+    
                         return new Launcher.ExtClassLoader(var1);
                     }
                 });
@@ -67,7 +68,7 @@ static class ExtClassLoader extends URLClassLoader {
                 throw (IOException)var1.getException();
             }
         }
-
+    
         private static File[] getExtDirs() {
             String var0 = System.getProperty("java.ext.dirs");
             File[] var1;
@@ -75,20 +76,20 @@ static class ExtClassLoader extends URLClassLoader {
                 StringTokenizer var2 = new StringTokenizer(var0, File.pathSeparator);
                 int var3 = var2.countTokens();
                 var1 = new File[var3];
-
+    
                 for(int var4 = 0; var4 < var3; ++var4) {
                     var1[var4] = new File(var2.nextToken());
                 }
             } else {
                 var1 = new File[0];
             }
-
+    
             return var1;
         }
-
+    
         private static URL[] getExtURLs(File[] var0) throws IOException {
             Vector var1 = new Vector();
-
+    
             for(int var2 = 0; var2 < var0.length; ++var2) {
                 String[] var3 = var0[var2].list();
                 if (var3 != null) {
@@ -100,17 +101,17 @@ static class ExtClassLoader extends URLClassLoader {
                     }
                 }
             }
-
+    
             URL[] var6 = new URL[var1.size()];
             var1.copyInto(var6);
             return var6;
         }
-
+    
         public String findLibrary(String var1) {
             var1 = System.mapLibraryName(var1);
             URL[] var2 = super.getURLs();
             File var3 = null;
-
+    
             for(int var4 = 0; var4 < var2.length; ++var4) {
                 URI var5;
                 try {
@@ -118,7 +119,7 @@ static class ExtClassLoader extends URLClassLoader {
                 } catch (URISyntaxException var9) {
                     continue;
                 }
-
+    
                 File var6 = Paths.get(var5).toFile().getParentFile();
                 if (var6 != null && !var6.equals(var3)) {
                     String var7 = VM.getSavedProperty("os.arch");
@@ -129,23 +130,23 @@ static class ExtClassLoader extends URLClassLoader {
                             return var8.getAbsolutePath();
                         }
                     }
-
+    
                     var8 = new File(var6, var1);
                     if (var8.exists()) {
                         return var8.getAbsolutePath();
                     }
                 }
-
+    
                 var3 = var6;
             }
-
+    
             return null;
         }
     }
 ```
 `ExtClassLoader` 加载的是 `System.getProperty("java.ext.dirs")` 路径下的类。
 
-```/Users/zhongzwang/Library/Java/Extensions
+​```/Users/zhongzwang/Library/Java/Extensions
 /Library/Java/JavaVirtualMachines/jdk1.8.0_171.jdk/Contents/Home/jre/lib/ext
 /Library/Java/Extensions
 /Network/Library/Java/Extensions
@@ -153,7 +154,7 @@ static class ExtClassLoader extends URLClassLoader {
 /usr/lib/java```
 
 #### AppClassLoader
-```    static class AppClassLoader extends URLClassLoader {
+​```    static class AppClassLoader extends URLClassLoader {
         final URLClassPath ucp = SharedSecrets.getJavaNetAccess().getURLClassPath(this);
 
         public static ClassLoader getAppClassLoader(final ClassLoader var0) throws IOException {

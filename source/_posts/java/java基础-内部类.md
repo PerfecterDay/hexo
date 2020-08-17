@@ -3,6 +3,7 @@ title: java基础-内部类
 date: 2019-08-18  09:27:12
 tags: java
 category: java
+typora-root-url: ..\..
 ---
 
 ### 内部类的好处

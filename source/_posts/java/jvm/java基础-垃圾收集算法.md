@@ -4,6 +4,7 @@ date: 2019-05-02 09:28:17
 tags: java
 category: 
 - [java,jvm]
+typora-root-url: ..\..\..
 ---
 
 垃圾收集需要考虑的三件事情：

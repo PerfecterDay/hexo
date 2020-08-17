@@ -3,6 +3,7 @@ title: docker-compose
 date: 2020-04-26  11:05:23
 tags: docker
 category: docker
+typora-root-url: ..\..
 ---
 
 我们知道使用一个 Dockerfile 模板文件，可以让用户很方便的定义一个单独的应用容器。然而，在日常工作中，经常会碰到需要多个容器相互配合来完成某项任务的情况。例如要实现一个 Web 项目，除了 Web 服务容器本身，往往还需要再加上后端的数据库服务容器，甚至还包括负载均衡容器等。

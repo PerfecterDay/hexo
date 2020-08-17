@@ -3,6 +3,7 @@ title: https及java支持
 date: 2018-06-06 19:44:30
 tags: https http
 category: 网络协议
+typora-root-url: ..\..
 ---
 
 ### https协议原理
@@ -104,4 +105,4 @@ InputStream ins = httpsURLConnection.getInputStream();
 while (ins.read() > 0){
 
 }
-```            
+```

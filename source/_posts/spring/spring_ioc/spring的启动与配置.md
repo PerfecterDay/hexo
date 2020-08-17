@@ -1,5 +1,5 @@
 ---
-title: Spring 应用上下文的启动与三种 bean 配置方式
+title: Spring 的启动与配置
 date: 2019-05-06  21:05:20
 tags: spring            
 category:

@@ -3,6 +3,7 @@ title: k8s hello world
 date: 2020-04-11  21:17:23
 tags: docker k8s
 category: docker
+typora-root-url: ..\..
 ---
 
 ![k8s组件](/pics/k8s-components.jpg)

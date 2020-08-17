@@ -4,20 +4,21 @@ date: 2018-11-03  08:43:24
 tags: NIO
 category: 
 - [java,IO]
+typora-root-url: ..\..\..
 ---
 主要转自：https://www.ibm.com/developerworks/cn/education/java/j-nio/j-nio.html
 
 ## 流与块的比较
-面向流 的 I/O 系统一次一个字节地处理数据。一个输入流产生一个字节流的数据，一个输出流消费一个字节流的数据。为流式数据创建过滤器非常容易。链接几个过滤器，以便每个过滤器只负责单个复杂处理机制的一部分，这样也是相对简单的。不利的一面是，面向流的 I/O 通常相当慢。   
+面向流 的 I/O 系统一次一个字节地处理数据。一个输入流产生一个字节流的数据，一个输出流消费一个字节流的数据。为流式数据创建过滤器非常容易。链接几个过滤器，以便每个过滤器只负责单个复杂处理机制的一部分，这样也是相对简单的。不利的一面是，面向流的 I/O 通常相当慢。
+
 一个 面向块 的 I/O 系统以块的形式处理数据。每一个操作都在一步中产生或者消费一个数据块。按块处理数据比按(流式的)字节处理数据要快得多。但是面向块的 I/O 缺少一些面向流的 I/O 所具有的优雅性和简单性。
 
 ## 通道
-Channel 是一个对象，可以通过它读取和写入数据。拿 NIO 与原来的 I/O 做个比较，通道就像是流。  
-所有数据都通过 Buffer 对象来处理。永远不会将字节直接写入通道中，相反，是将数据写入包含一个或者多个字节的缓冲区。同样，也不会直接从通道中读取字节，而是将数据从通道读入缓冲区，再从缓冲区获取这个字节。  
+Channel 是一个对象，可以通过它读取和写入数据。拿 NIO 与原来的 I/O 做个比较，通道就像是流。 所有数据都通过 Buffer 对象来处理。永远不会将字节直接写入通道中，相反，是将数据写入包含一个或者多个字节的缓冲区。同样，也不会直接从通道中读取字节，而是将数据从通道读入缓冲区，再从缓冲区获取这个字节。 
 通道与流的不同之处在于通道是双向的。而流只是在一个方向上移动(一个流必须是 InputStream 或者 OutputStream 的子类)， 而 通道可以用于读、写或者同时用于读写。 
-常见的Channel有： FileChannel、SelectableChannel、ServerSocketChannel、SocketChannel、DatagramChannel、Pipe.SinkChannel、Pipe.SourceChannel。   
-所有 Channel 都不应该使用构造器来直接创建，而是通过传统的节点流 InputStream/OutputStream 的 `getChannel` 方法来返回对应的Channel。不同的节点流获取的Channel不一样， FileInputStream/FileOutputStream->FileChannel;PipedInputStream->Pipe.SinkChannel;PipedOutputStream->Pipe.SourceChannel。    
+常见的Channel有： FileChannel、SelectableChannel、ServerSocketChannel、SocketChannel、DatagramChannel、Pipe.SinkChannel、Pipe.SourceChannel。 所有 Channel 都不应该使用构造器来直接创建，而是通过传统的节点流 InputStream/OutputStream 的 `getChannel` 方法来返回对应的Channel。不同的节点流获取的 Channel 不一样， FileInputStream/FileOutputStream->FileChannel; PipedInputStream->Pipe.SinkChannel; PipedOutputStream->Pipe.SourceChannel 。
 Channel中最常用的方法：
+
 + map: 将Channel对应的部分或全部数据映射到 ByteBuffer
 + read: 有很多重载方法，从Channel中读取数据到给定 buffer
 + write: 有很多重载方法，将 buffer 中的数据写入到 Channel
@@ -127,6 +128,7 @@ SelectionKey代表的是 SelectableChannel 和 Selector 之间的注册关系。
 + Selector selector(): 获取 Selector
 + SelectableChannel channel(): 获取 SelectableChannel
   
+
 所以，下一步是将新打开的 `ServerSocketChannel` 注册到 `Selector` 上。为此我们使用 `SelectableChannel.register()` 方法，如下所示：
 ```
 SelectionKey key = ssc.register( selector, SelectionKey.OP_ACCEPT );

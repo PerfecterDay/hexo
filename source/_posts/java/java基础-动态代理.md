@@ -3,11 +3,12 @@ title: java基础-动态代理
 date: 2018-05-10  21:49:35
 tags: 动态代理
 category: java
+typora-root-url: ..\..
 ---
 
 # Proxy
     public class Proxy implements java.io.Serializable{
-
+    
         public static Object newProxyInstance(ClassLoader loader,
                                           Class<?>[] interfaces,
                                           InvocationHandler h){
@@ -44,17 +45,17 @@ JDK的 sun.misc.ProxyGenerator 可以生成动态的代理对象，这个代理�
 流程如下：
 
     代理类对象.接口方法()---->代理类对象内部实现的接口方法()----->InvocationHandler.invoke()方法。
-
+    
     interface A{
       void say();
     }
-
+    
     interface B{
       void run();
     }
-
+    
     Object o = Proxy.newProxyInstance(A.class.getClassLoader(),new Class[]{A.class,B.class},new Handler());
-
+    
     (A) o.say();
     (B) o.run();
 
@@ -64,11 +65,11 @@ JDK的 sun.misc.ProxyGenerator 可以生成动态的代理对象，这个代理�
         InvocationHandler h;
         Method say; //通过反射会初始化为A的say方法对象
         Method run; //通过反射会初始化为B的run方法对象
-
+    
        public void say(){
           h.invoke(this,m1,null);
        }
-
+    
        public void run(){
           h.invoke(this,m1,null);
        }

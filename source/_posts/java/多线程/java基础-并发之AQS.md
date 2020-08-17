@@ -4,6 +4,7 @@ date: 2019-04-12 20:18:30
 tags: java
 category:
 - [java,多线程]
+typora-root-url: ..\..\..
 ---
 
 `AbstractQueuedSynchronizer` 队列同步器是用来构建各种锁或者其他同步组件的基础。它使用一个 int 型变量来表示同步状态，通过内置的FIFO队列来完成线程的排队工作，Doug Lea 期望它成为实现大部分同步需求的基础。

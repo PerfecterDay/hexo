@@ -3,10 +3,21 @@ title: git 常用命令
 date: 2018-10-30 21:52:10
 tags: git
 category: git
+typora-root-url: ..\..
 ---
+### Github 配置 SSH 登录
+1. 打开 git bash，非 windows 下不需要
+2. 查看是否已经有 SSH keys： `ls -la ~/.ssh`
+3. 生成 SSH keys: `ssh-keygen -t rsa -b 4096 -C "your_email@example.com"`
+4. 启动 ssh-agent：eval `ssh-agent -s`
+5. 添加 key 到 ssh-agent: `ssh-add ~/.ssh/id_ed25519`
+6. 将生成的 SSH 公钥(id_rsa.pub)粘贴到GitHub上
+7. 测试能否连接：`ssh -T git@github.com`
+   
+
 <img src="/pics/git-frame.jpg" width="50%" height="50%" />
 
-## git 常用命令
+### git 常用命令
 0. `git clean`: 删除工作区中未跟踪（不在版本库也未索引的）的文件
 1. `git add`: 这是个多功能命令:可以用它开 始跟踪新文件，或者把已跟踪的文件放到暂存区，还能用于合并时把有冲突的文件标记为已解决状态等
 2. `git ls-files --satge`:查看暂存区的文件
@@ -26,12 +37,13 @@ category: git
 16. `git reset --hard head~1`:用上一次提交的版本库状态恢复暂存区和工作区
 17. `git log`: 查看提交历史记录
 18. `git log filename`: 查看某个文件的历史提交记录
-19. `git reflog`:查看引用历史记录
-20. `git reset ref`:将版本库恢复到某次提交状态，适用于往前reset后又想往后reset
-21. `git stash`:将当前工作区中的修改保存起来,并用版本库中的内容恢复暂存区和工作区，当开发到一半时，需要处理另一个bug时使用
-22. `git stash pop`:将保存的内容恢复到工作区
+19. `git show <commit_id>`: 查看某次提交的信息信息
+20. `git reflog`:查看引用历史记录
+21. `git reset ref`:将版本库恢复到某次提交状态，适用于往前reset后又想往后reset
+22. `git stash`:将当前工作区中的修改保存起来,并用版本库中的内容恢复暂存区和工作区，当开发到一半时，需要处理另一个bug时使用
+23. `git stash pop`:将保存的内容恢复到工作区
 
-## git 分支
+### git 分支
 0. `git checkout -b 本地分支名x origin/远程分支名x `: 在本地新建分支x，并自动切换到该本地分支x
 1. `git branch -a`:查看所有分支
 2. `git branch --merged|--no-merged`:查看已经合并到/尚未合并当前分支的分支
@@ -43,14 +55,14 @@ category: git
 8. `git merge --abort`: 中断合并
 9. `git rebase <targetBranch> <sourceBranch>`: Rebase 实际上就是取出 sourceBranch 的一系列的提交记录，“复制”它们，然后在targetBranch 的后边逐个的放下去，创造更线性的提交历史。sourceBranch 省略时，表示将当前分支 rebase到 targetBranch。
 
-## git远程命令
+### git远程命令
 1. `git clone`: 从远程库克隆
 2. `git remote` :显示远程主机
 3. `git remote show <仓库名>` :显示远程主机详细信息
 4. `git remote add <仓库名> <仓库地址>`:添加远程主机
 5. `git remote rm <仓库名>`：删除远程主机
 6. `git remote rename <原仓库名> <新仓库名>`：远程主机的改名
-7. `git fetch <仓库名>`：访问远程仓库，从中拉取所有你还没有的数据。 执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看
+7. `git fetch <仓库名>`：访问远程仓库，从中拉取所有你本地仓库还没有的数据。 执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看
 8. `git fetch origin 远程分支名x:本地分支名x` : 在本地新建分支x，但是不会自动切换到该本地分支x，需要手动checkout
 9.  `git fetch <仓库名> <分支名>`：取回远程主机指定分支的更新
 10. `git pull <仓库名> <远程分支名>:<本地分支名>`：取回远程主机某个分支的更新，再与本地的指定分支合并
@@ -64,7 +76,7 @@ category: git
 18. `git push remote --delete remotebranch` :删除remote的remotebranch分支
 19. `git push` : 如果当前分支只有一个追踪分支，那么主机名都可以省略
 
-### 常见问题
+#### 常见问题
 1. windows乱码：  
     使用git bush时，使用git add XX 添加文件后，git status 发现中文文件名是数字形式，比如"\123\456\789.txt"，点击也无法打开，二使用ls，git log都可以显示中文，最后修改配置:
     `git config --global core.quotepath false ` 解决

@@ -22,19 +22,19 @@ Then to load mysql now:
     launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
 Or, if you don't want/need launchctl, you can just run:
     mysql.server start
-```
+ ```
 如果按上面的说明操作的话，未免太麻烦了，而且也很难记住 plist 的位置。还好 Homebrew 提供了一个易用的接口来管理 plist，然后你就不用再纠结什么 `ln`，`launchctl`，和 plist 的位置了。
 
 ## brew services
 首先安装 `brew services` 命令
  ```
  brew tap gapple/services
-```
+ ```
 下面举个例子
  ```
  $ brew services start mysql
 ==> Successfully started `mysql` (label: homebrew.mxcl.mysql)
-```
+ ```
 
 在后台，`brew services start` 其实执行了最上面的安装后消息里面提到的所有命令，比如首先运行 `ln -sfv ...`，然后 `launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist` 。
 
@@ -44,7 +44,7 @@ brew services restart mysql
 Stopping `mysql`... (might take a while)
 ==> Successfully stopped `mysql` (label: homebrew.mxcl.mysql)
 ==> Successfully started `mysql` (label: homebrew.mxcl.mysql)
-```
+ ```
 
 想看所有的已启用的服务的话：
  ```
@@ -54,7 +54,7 @@ postgresql started      443 /Users/gabe/Library/LaunchAgents/homebrew.mxcl.postg
 mongodb    started      444 /Users/gabe/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
 memcached  started      445 /Users/gabe/Library/LaunchAgents/homebrew.mxcl.memcached.plist
 mysql      started    87538 /Users/gabe/Library/LaunchAgents/homebrew.mxcl.mysql.plist
-```
+ ```
 
 要注意的是，这里不止显示通过 `brew services` 加载的服务，也包含 `launchctl load` 加载的。
 
@@ -62,6 +62,7 @@ mysql      started    87538 /Users/gabe/Library/LaunchAgents/homebrew.mxcl.mysql
  ```
 $ brew services cleanup
 Removing unused plist /Users/gabe/Library/LaunchAgents/homebrew.mxcl.mysql.plist
-```
+ ```
 
 > 最后一提，这玩意路径不一样，会直接复制到 LaunchAgents 目录，结果就是两个一样的启动项了，系统 log 里会很烦人的。。
+

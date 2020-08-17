@@ -3,6 +3,7 @@ title: Unix的I/O模型
 date: 2018-06-08 13:23:07
 tags: os
 category: os
+typora-root-url: ..\..
 ---
 # 几种I/O模型
 

@@ -4,6 +4,7 @@ date: 2019-04-15 20:17:27
 tags: java
 category: 
 - [java,多线程]
+typora-root-url: ..\..\..
 ---
 
 ## 处理器如何实现原子操作

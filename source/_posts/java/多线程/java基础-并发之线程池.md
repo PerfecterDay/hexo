@@ -4,6 +4,7 @@ date: 2018-05-06 11:02:00
 tags: java
 category: 
 - [java,多线程]
+typora-root-url: ..\..\..
 ---
 
 
@@ -59,7 +60,7 @@ JDK1.5 提供了一个 Executors 工厂来生产线程池，该工厂里包含�
                 this.handler = handler;
             }
     }
-
+    
     public ThreadPoolExecutor(int corePoolSize,
                                       int maximumPoolSize,
                                       long keepAliveTime,
@@ -118,7 +119,7 @@ JDK1.5 提供了一个 Executors 工厂来生产线程池，该工厂里包含�
 注意：上述第二步 --> 看看是否有空闲线程可用，有空闲线程则使用空闲线程执行任务；若无空闲线程，则进入下个流程。没有在图中体现出来。
 
 ### 源码分析
-    
+
     public void execute(Runnable command) {
         if (command == null)
                 throw new NullPointerException();

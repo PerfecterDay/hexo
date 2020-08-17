@@ -4,6 +4,7 @@ date: 2020-06-15 08:17:20
 tags: java
 category: 
 - [java,jvm]
+typora-root-url: ..\..\..
 ---
 
 <img src="/pics/gc-collector.png" alt="" width=60% height=60%>

@@ -4,6 +4,7 @@ date: 2019-03-04  22:08:24
 tags: jvm
 category: 
 - [java,jvm]
+typora-root-url: ..\..\..
 ---
 
 <img src="/pics/jvm运行时数据区.png" alt="JVM运行时数据区" width="60%" height="60%" >

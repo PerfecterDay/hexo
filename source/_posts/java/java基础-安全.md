@@ -2,10 +2,9 @@
 title: java基础-安全
 date: 2020-04-12  21:32:24
 tags: java
-category: java
+category: java基础安全架构
+typora-root-url: ..\..
 ---
-
-### 基础安全架构
 
 Java的安全基础架构主要有以下特点：
 + 实现是互相独立的，java中的安全服务是由 provider 提供的，这些 provider 通过标准接口插入到 java 平台，应用程序可以直接请求这些 provider 提供的安全服务。

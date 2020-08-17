@@ -4,6 +4,7 @@ date: 2019-08-18  20:13:04
 tags: java
 category: 
 - [java,IO]
+typora-root-url: ..\..\..
 ---
 
 ### 序列化方式

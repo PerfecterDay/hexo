@@ -3,6 +3,7 @@ title: docker 命令
 date: 2019-02-21  20:38:24
 tags: docker
 category: docker
+typora-root-url: ..\..
 ---
 #### docker 核心组件
 0. Docker客户端与服务器端：Docker是 C/S 架构的，

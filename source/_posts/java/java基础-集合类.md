@@ -3,6 +3,7 @@ title: java基础-集合
 date: 2019-06-01  20:30:34
 tags: java
 category: java
+typora-root-url: ..\..
 ---
 Java 集合大致可分为 Set 、List 、 Queue 和 Map 四种体系，其中
 + Set 代表 **无序的、不可重复的集合**；

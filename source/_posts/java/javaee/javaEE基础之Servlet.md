@@ -4,6 +4,7 @@ date: 2019-04-27  22:07:35
 tags: web
 category: 
 - [java,JavaEE]
+typora-root-url: ..\..\..
 ---
 
 Servlet是所有Java Web应用程序的核心类，它是唯一的既可以直接处理和相应用户请求，也可以将处理工作委托给应用中其它部分的类。除非某些过滤器提前终止了客户端的请求，否则所有的请求都将被发送到某些Servlet中。

@@ -4,6 +4,7 @@ date: 2018-06-11 21:14:30
 tags: java
 category:
 - [java,多线程]
+typora-root-url: ..\..\..
 ---
 
 ## 线程的状态

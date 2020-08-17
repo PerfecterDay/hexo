@@ -4,6 +4,7 @@ date: 2019-04-26  22:07:35
 tags: web
 category: 
 - [java,JavaEE]
+typora-root-url: ..\..\..
 ---
 ## 目录结构和War文件
 所有的 Java EE 服务器都支持War应用程序归档，大部分服务器还支持未归档的应用程序目录。如下图所示：

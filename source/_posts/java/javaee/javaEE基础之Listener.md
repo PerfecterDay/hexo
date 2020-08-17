@@ -4,6 +4,7 @@ date: 2019-04-28  15:56:39
 tags: web
 category: 
 - [java,JavaEE]
+typora-root-url: ..\..\..
 ---
 
 ## Java EE 中的 Listener 
@@ -16,6 +17,7 @@ category:
 
 2. `HttpSession` 相关接口
    
+
 `HttpSessionListener` ：用于监听 session 的创建和销毁。
 `HttpSessionIdListener`  ：用于监听 session 的 id 是否被更改。
 `HttpSessionAttributeListener` ：用于监听 session 范围的属性变化。
@@ -29,6 +31,7 @@ category:
 
 4. 异步接口
    
+
 `AsyncListener` : 用于监听异步请求。
 
 ## 配置 Listener

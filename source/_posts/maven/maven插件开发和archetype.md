@@ -18,6 +18,11 @@ Maven插件的 pom 有两个特殊的地方：
   2. 必须依赖一个 maven-plugin-api 的 artifact。
 创建好插件项目之后，我们要创建一个Mojo：继承 AbstractMojo 、实现 execute() 方法、提供 @goal 注解。
 
+#### 调试自己开发的 Maven 插件
+1. 将自己开发的插件 mvn install 到本地
+2. 在一个项目X中使用开发的插件，然后，在该项目路径下执行`mvnDebug com.ebay.raptor.build:assembler-maven-plugin:3.0.25-RELEASE:package`，注意插件的版本要一致，不然代码无法匹配，代码断点会失效；执行后会打开一个端口等待 debugger 连接 
+3. 在插件开发的IDEA项目中，新建一个 remote 的 debug/run configuration，port修改为上面的port，然后在项目代码中打上断点，然后debug执行即可
+
 
 ### Maven Archetype 开发
 一个典型的 Maven Archetype 项目主要包括以下几个部分：
@@ -86,3 +91,11 @@ Maven插件的 pom 有两个特殊的地方：
 
 #### 生成本地仓库的 Archetype Catalog
 当我们构建了一个 Archetype 项目并且安装到本地后，我们可以将其添加到本地 archetype-catlog.xml 文件中，这样在生成项目时，就会出现在供选择的列表中了。还有一种方法就是执行 `mvn archetype:crawl` 目标，它会遍历本地的 Maven 仓库的内容，并自动生成 archetype-catlog.xml 文件。
+
+#### IDEA 添加/删除自定义的 archetype
+创建一个项目以后，每次新建项目想以此项目为模板建立新项目，可以将该项目添加到IDEA的 archetype 中。
+
+1. `mvn archetype:create-from-project` ： 生成archetype
+2. 到 target/generated-sources/archetype 目录下执行 `mvn install`
+3. 在IDEA新建项目或module的时候，添加 archetype
+4. 删除：C:\Users\BaIcy\.IdeaIC2019.2\system\Maven\Indices\UserArchetypes.xml 文件中删除添加的自定义的 archetype
